@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule } from '@nestjs/microservices';
 import { grpcPostClientOptions } from '../../grpc/grpc-client.options';
-import { PostController } from './post.controller';
-import { PostService } from './post.service';
+import { CommentController } from './comment.controller';
+import { CommentService } from './comment.service';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { PostService } from './post.service';
       },
     ]),
   ],
-  controllers: [PostController],
-  providers: [PostService],
+  controllers: [CommentController],
+  providers: [CommentService],
 })
-export class PostModule {}
+export class CommentModule {}

@@ -3,7 +3,7 @@ syntax = "proto3";
 package posts;
 
 service PostService {
-  // Post ---
+  // Post --
   rpc GetAllPosts (GetAllPostsRequest) returns (PostsResponse);
   rpc GetPostId (GetPostIdRequest) returns (PostResponse);
   rpc CreatePost (CreatePostRequest) returns (PostResponse);
@@ -18,6 +18,14 @@ service PostService {
   rpc CheckLikeExists (CheckLikeExistsRequest) returns (CheckLikeExistsResponse);
   rpc UpdateLike (UpdateLikeRequest) returns (LikeResponse);
   rpc DeleteLike (DeleteLikeRequest) returns (DeleteLikeResponse);
+
+  // Comment --
+  rpc GetAllComments (GetAllCommentsRequest) returns (CommentsResponse);
+  rpc GetCommentId (GetCommentIdRequest) returns (CommentResponse);
+  rpc CreateComment (CreateCommentRequest) returns (CommentResponse);
+  rpc CheckCommentExists (CheckCommentExistsRequest) returns (CheckCommentExistsResponse);
+  rpc UpdateComment (UpdateCommentRequest) returns (CommentResponse);
+  rpc DeleteComment (DeleteCommentRequest) returns (DeleteCommentResponse);
 }
 
 // Post --
@@ -63,15 +71,6 @@ message PostResponse {
   string deletedAt = 8;
   string deletedBy = 9;
   string userId = 10;
-}
-
-message PageMeta {
-  int32 page = 1;
-  int32 take = 2;
-  int32 itemCount = 3;
-  int32 pageCount = 4;
-  bool hasPreviousPage = 5;
-  bool hasNextPage = 6;
 }
 
 message PostsResponse {
@@ -144,4 +143,77 @@ message DeleteLikeRequest {
 message DeleteLikeResponse {
   string data = 1;
   string message = 2;
+}
+
+// Comment --
+message GetAllCommentsRequest {
+  int32 page = 1;
+  int32 take = 2;
+  string search = 3;
+}
+
+message GetCommentIdRequest {
+  string id = 1;
+}
+
+message CreateCommentRequest {
+  string content = 1;
+  repeated bytes mediaPath = 2;
+  string postId = 3;
+  string userId = 4;
+}
+
+message CheckCommentExistsRequest {
+  string id = 1;
+}
+
+message CheckCommentExistsResponse {
+  bool exists = 1;
+}
+
+message UpdateCommentRequest {
+  string id = 1;
+  string content = 2;
+  repeated bytes mediaPath = 3;
+  string postId = 4;
+  string userId = 5;
+}
+
+message CommentResponse {
+  string id = 1;
+  string content = 2;
+  repeated string mediaPath = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  string postId = 10;
+  string userId = 11;
+}
+
+message CommentsResponse {
+  repeated CommentResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message DeleteCommentRequest {
+  string id = 1;
+}
+
+message DeleteCommentResponse {
+  string data = 1;
+  string message = 2;
+}
+
+// DTOs --
+message PageMeta {
+  int32 page = 1;
+  int32 take = 2;
+  int32 itemCount = 3;
+  int32 pageCount = 4;
+  bool hasPreviousPage = 5;
+  bool hasNextPage = 6;
 }

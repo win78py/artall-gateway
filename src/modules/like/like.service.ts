@@ -26,8 +26,8 @@ import { CreateLikeDto } from './dto/create-like.dto';
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
 export class LikeService {
-  private likeServiceClient: LikeServiceClient;
   private readonly logger = new Logger(LikeService.name);
+  private likeServiceClient: LikeServiceClient;
   constructor(@Inject('POST_SERVICE') private client: ClientGrpc) {}
 
   onModuleInit() {
