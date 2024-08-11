@@ -1,0 +1,327 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  // User Info --
+  rpc GetAllUsersInfo (GetAllUsersInfoRequest) returns (UsersInfoResponse);
+  rpc GetUserInfoId (GetUserInfoIdRequest) returns (UserInfoResponse);
+  rpc CreateUserInfo (CreateUserInfoRequest) returns (UserInfoResponse);
+  rpc CheckUserInfoExists (CheckUserInfoExistsRequest) returns (CheckUserInfoExistsResponse);
+  rpc UpdateUserInfo (UpdateUserInfoRequest) returns (UserInfoResponse);
+  rpc DeleteUserInfo (DeleteUserInfoRequest) returns (DeleteUserInfoResponse);
+
+  // User Profile --
+  rpc GetAllUsersProfile (GetAllUsersProfileRequest) returns (UsersProfileResponse);
+  rpc GetUserProfileId (GetUserProfileIdRequest) returns (UserProfileResponse);
+  rpc CreateUserProfile (CreateUserProfileRequest) returns (UserProfileResponse);
+  rpc CheckUserProfileExists (CheckUserProfileExistsRequest) returns (CheckUserProfileExistsResponse);
+  rpc UpdateUserProfile (UpdateUserProfileRequest) returns (UserProfileResponse);
+  rpc DeleteUserProfile (DeleteUserProfileRequest) returns (DeleteUserProfileResponse);
+
+  // Follow --
+  rpc GetAllFollow (GetAllFollowRequest) returns (ManyFollowResponse);
+  rpc GetFollowId (GetFollowIdRequest) returns (FollowResponse);
+  rpc CreateFollow (CreateFollowRequest) returns (FollowResponse);
+  rpc CheckFollowExists (CheckFollowExistsRequest) returns (CheckFollowExistsResponse);
+  rpc UpdateFollow (UpdateFollowRequest) returns (FollowResponse);
+  rpc DeleteFollow (DeleteFollowRequest) returns (DeleteFollowResponse);
+
+  // Block --
+  rpc GetAllBlockList (GetAllBlockListRequest) returns (ManyBlockResponse);
+  rpc GetBlockId (GetBlockIdRequest) returns (BlockResponse);
+  rpc CreateBlock (CreateBlockRequest) returns (BlockResponse);
+  rpc CheckBlockExists (CheckBlockExistsRequest) returns (CheckBlockExistsResponse);
+  rpc UpdateBlock (UpdateBlockRequest) returns (BlockResponse);
+  rpc DeleteBlock (DeleteBlockRequest) returns (DeleteBlockResponse);
+}
+
+// User Info --
+message GetAllUsersInfoRequest {
+  int32 page = 1;
+  int32 take = 2;
+  string search = 3;
+}
+
+message GetUserInfoIdRequest {
+  string id = 1;
+}
+
+message CreateUserInfoRequest {
+  string username = 1;
+  string profilePicture = 2;
+}
+
+message CheckUserInfoExistsRequest {
+  string id = 1;
+}
+
+message CheckUserInfoExistsResponse {
+  bool exists = 1;
+}
+
+message UpdateUserInfoRequest {
+  string id = 1;
+  string username = 2;
+  bytes profilePicture = 3;
+}
+
+message UserInfoResponse {
+  string id = 1;
+  string username = 2;
+  string profilePicture = 3;
+  string createdAt = 4;
+  string createdBy = 5 ;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+}
+
+message UsersInfoResponse {
+  repeated UserInfoResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message DeleteUserInfoRequest {
+  string id = 1;
+}
+
+message DeleteUserInfoResponse {
+  string data = 1;
+  string message = 2;
+}
+
+// User Profile --
+message GetAllUsersProfileRequest {
+  int32 page = 1;
+  int32 take = 2;
+  string search = 3;
+}
+
+message GetUserProfileIdRequest {
+  string id = 1;
+}
+
+message CreateUserProfileRequest {
+  string password = 1;
+  string fullName = 2;
+  string email = 3;
+  string phoneNumber = 4;
+  string bio = 5;
+  string role = 6;
+  string birthDate = 7;
+  string location = 8;
+  string website = 9;
+  string socialLinks = 10;
+  string lastLogin = 11;
+  string profileVisibility = 12;
+  string gender = 13;
+  string isActive = 14;
+  string userInfoId = 15;
+}
+
+message CheckUserProfileExistsRequest {
+  string id = 1;
+}
+
+message CheckUserProfileExistsResponse {
+  bool exists = 1;
+}
+
+message UpdateUserProfileRequest {
+  string id = 1;
+  string password = 2;
+  string fullName = 3;
+  string email = 4;
+  string phoneNumber = 5;
+  string bio = 6;
+  string role = 7;
+  string birthDate = 8;
+  string location = 9;
+  string website = 10;
+  string socialLinks = 11;
+  string lastLogin = 12;
+  string profileVisibility = 13;
+  string gender = 14;
+  bool isActive = 15;
+  string userInfoId = 16;
+}
+
+message UserInfo {
+  string id = 1;
+  string username = 2;
+  string profilePicture = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+}
+
+message UserProfileResponse {
+  string id = 1;
+  string password = 2;
+  string fullName = 3;
+  string email = 4;
+  string phoneNumber = 5;
+  string bio = 6;
+  string role = 7;
+  string birthDate = 8;
+  string location = 9;
+  string website = 10;
+  string socialLinks = 11;
+  string lastLogin = 12;
+  string profileVisibility = 13;
+  string gender = 14;
+  string isActive = 15;
+  string userInfoId = 16;
+  string createdAt = 17;
+  string createdBy = 18 ;
+  string updatedAt = 19;
+  string updatedBy = 20;
+  string deletedAt = 21;
+  string deletedBy = 22;
+  UserInfo userInfo = 23;
+}
+
+message UsersProfileResponse {
+  repeated UserProfileResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message DeleteUserProfileRequest {
+  string id = 1;
+}
+
+message DeleteUserProfileResponse {
+  string data = 1;
+  string message = 2;
+}
+
+// Follow --
+message GetAllFollowRequest {
+  int32 page = 1;
+  int32 take = 2;
+  string search = 3;
+}
+
+message GetFollowIdRequest {
+  string id = 1;
+}
+
+message CreateFollowRequest {
+  string followerId = 1;
+  string followingId = 2;
+}
+
+message CheckFollowExistsRequest {
+  string id = 1;
+}
+
+message CheckFollowExistsResponse {
+  bool exists = 1;
+}
+
+message UpdateFollowRequest {
+  string id = 1;
+  string followerId = 2;
+  string followingId = 3;
+}
+
+message FollowResponse {
+  string id = 1;
+  string followerId = 2;
+  string followingId = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+}
+
+message ManyFollowResponse {
+  repeated FollowResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message DeleteFollowRequest {
+  string id = 1;
+}
+
+message DeleteFollowResponse {
+  string data = 1;
+  string message = 2;
+}
+
+// Block --
+message GetAllBlockListRequest {
+  int32 page = 1;
+  int32 take = 2;
+  string search = 3;
+}
+
+message GetBlockIdRequest {
+  string id = 1;
+}
+
+message CreateBlockRequest {
+  string blockerId = 1;
+  string blockedId = 2;
+}
+
+message CheckBlockExistsRequest {
+  string id = 1;
+}
+
+message CheckBlockExistsResponse {
+  bool exists = 1;
+}
+
+message UpdateBlockRequest {
+  string id = 1;
+  string blockerId = 2;
+  string blockedId = 3;
+}
+
+message BlockResponse {
+  string id = 1;
+  string blockerId = 2;
+  string blockedId = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+}
+
+message ManyBlockResponse {
+  repeated BlockResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message DeleteBlockRequest {
+  string id = 1;
+}
+
+message DeleteBlockResponse {
+  string data = 1;
+  string message = 2;
+}
+
+// DTOs
+message PageMeta {
+  int32 page = 1;
+  int32 take = 2;
+  int32 itemCount = 3;
+  int32 pageCount = 4;
+  bool hasPreviousPage = 5;
+  bool hasNextPage = 6;
+}
