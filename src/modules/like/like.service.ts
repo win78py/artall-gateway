@@ -12,11 +12,11 @@ import {
   CheckLikeExistsResponse,
   CreateLikeRequest,
   DeleteLikeResponse,
-  GetAllLikeRequest,
+  GetAllLikesRequest,
   GetLikeIdRequest,
   LikeResponse,
   LikeServiceClient,
-  ManyLikeResponse,
+  LikesResponse,
 } from 'src/common/interface/like.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
@@ -35,8 +35,8 @@ export class LikeService {
       this.client.getService<LikeServiceClient>('PostService');
   }
 
-  getAllLike(params: GetAllLikeRequest): Observable<ManyLikeResponse> {
-    return this.likeServiceClient.getAllLike(params);
+  getAllLikes(params: GetAllLikesRequest): Observable<LikesResponse> {
+    return this.likeServiceClient.getAllLikes(params);
   }
 
   getLikeById(id: string): Observable<LikeResponse> {

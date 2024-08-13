@@ -14,6 +14,7 @@ import { AppService } from './app.service';
 import { UserProfileModule } from './modules/user_profile/user_profile.module';
 import { LikeModule } from './modules/like/like.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { LikeCommentModule } from './modules/likeComment/likeComment.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CommentModule } from './modules/comment/comment.module';
     PostModule,
     LikeModule,
     CommentModule,
+    LikeCommentModule,
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
