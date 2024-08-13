@@ -11,9 +11,9 @@ import { LikeService } from './like.service';
 import { Observable } from 'rxjs';
 import {
   DeleteLikeResponse,
-  GetAllLikeRequest,
+  GetAllLikesRequest,
   LikeResponse,
-  ManyLikeResponse,
+  LikesResponse,
 } from '../../common/interface/like.interface';
 import { CreateLikeDto } from './dto/create-like.dto';
 
@@ -22,13 +22,13 @@ export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
   @Get()
-  getAllLike(@Query() query): Observable<ManyLikeResponse> {
-    const params: GetAllLikeRequest = {
+  getAllLikes(@Query() query): Observable<LikesResponse> {
+    const params: GetAllLikesRequest = {
       page: query.page || 1,
       take: query.take || 10,
       search: query.search || '',
     };
-    return this.likeService.getAllLike(params);
+    return this.likeService.getAllLikes(params);
   }
 
   @Get(':id')

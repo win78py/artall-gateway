@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 export interface LikeServiceClient {
-  getAllLike(request: GetAllLikeRequest): Observable<ManyLikeResponse>;
+  getAllLikes(request: GetAllLikesRequest): Observable<LikesResponse>;
   getLikeId(request: GetLikeIdRequest): Observable<LikeResponse>;
   createLike(request: CreateLikeRequest): Observable<LikeResponse>;
   checkLikeExists(
@@ -11,7 +11,7 @@ export interface LikeServiceClient {
   deleteLike(request: DeleteLikeRequest): Observable<DeleteLikeResponse>;
 }
 
-export interface GetAllLikeRequest {
+export interface GetAllLikesRequest {
   page?: number;
   take?: number;
   search?: string;
@@ -52,7 +52,7 @@ export interface LikeResponse {
   deletedBy: string;
 }
 
-export interface ManyLikeResponse {
+export interface LikesResponse {
   data: LikeResponse[];
   meta: PageMeta;
   message: string;
