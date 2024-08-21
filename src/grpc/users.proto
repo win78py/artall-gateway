@@ -4,6 +4,7 @@ package users;
 
 service UserService {
   // User Info --
+  rpc GetAllUsers (GetAllUsersInfoRequest) returns (UsersResponse);
   rpc GetAllUsersInfo (GetAllUsersInfoRequest) returns (UsersInfoResponse);
   rpc GetUserInfoId (GetUserInfoIdRequest) returns (UserInfoResponse);
   rpc CreateUserInfo (CreateUserInfoRequest) returns (UserInfoResponse);
@@ -66,6 +67,44 @@ message UpdateUserInfoRequest {
   bytes profilePicture = 3;
 }
 
+message UserResponse {
+  string id = 1;
+  string username = 2;
+  string profilePicture = 3;
+  string createdAt = 4;
+  string createdBy = 5 ;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  UserProfile userProfile = 10;
+}
+
+message UserProfile {
+  string id = 1;
+  string password = 2;
+  string fullName = 3;
+  string email = 4;
+  string phoneNumber = 5;
+  string bio = 6;
+  string role = 7;
+  string birthDate = 8;
+  string location = 9;
+  string website = 10;
+  string socialLinks = 11;
+  string lastLogin = 12;
+  string profileVisibility = 13;
+  string gender = 14;
+  string isActive = 15;
+  string userInfoId = 16;
+  string createdAt = 17;
+  string createdBy = 18 ;
+  string updatedAt = 19;
+  string updatedBy = 20;
+  string deletedAt = 21;
+  string deletedBy = 22;
+}
+
 message UserInfoResponse {
   string id = 1;
   string username = 2;
@@ -76,6 +115,12 @@ message UserInfoResponse {
   string updatedBy = 7;
   string deletedAt = 8;
   string deletedBy = 9;
+}
+
+message UsersResponse {
+  repeated UserResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
 }
 
 message UsersInfoResponse {
@@ -91,13 +136,14 @@ message DeleteUserInfoRequest {
 message DeleteUserInfoResponse {
   string data = 1;
   string message = 2;
-}
+} 
 
 // User Profile --
 message GetAllUsersProfileRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  string fullName = 3;
+  string userInfoId = 4;
 }
 
 message GetUserProfileIdRequest {
@@ -184,7 +230,6 @@ message UserProfileResponse {
   string updatedBy = 20;
   string deletedAt = 21;
   string deletedBy = 22;
-  UserInfo userInfo = 23;
 }
 
 message UsersProfileResponse {
@@ -206,7 +251,8 @@ message DeleteUserProfileResponse {
 message GetAllFollowRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  string follower = 3;
+  string following = 4;
 }
 
 message GetFollowIdRequest {
@@ -232,6 +278,20 @@ message UpdateFollowRequest {
   string followingId = 3;
 }
 
+message FollowerFollowingResponse {
+  string id = 1;
+  string followerId = 2;
+  string followingId = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  UserInfo follower = 10;
+  UserInfo following = 11;
+}
+
 message FollowResponse {
   string id = 1;
   string followerId = 2;
@@ -245,7 +305,7 @@ message FollowResponse {
 }
 
 message ManyFollowResponse {
-  repeated FollowResponse data = 1;
+  repeated FollowerFollowingResponse data = 1;
   PageMeta meta = 2;
   string message = 3;
 }

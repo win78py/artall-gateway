@@ -17,7 +17,9 @@ import {
   UpdateUserInfoRequest,
   UserInfoResponse,
   UserInfoServiceClient,
+  UserResponse,
   UsersInfoResponse,
+  UsersResponse,
 } from 'src/common/interface/useInfor.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
@@ -25,20 +27,33 @@ import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exceptio
 import { UpdateUserInfoDto } from './dto/update-userInfo.dto';
 import { validate as uuidValidate } from 'uuid';
 import { CreateUserInfoDto } from './dto/create-user_info.dto';
+import { CreateUserWithProfileDto } from './dto/create-user.dto';
+import { formatISO } from 'date-fns';
+import {
+  CreateUserProfileRequest,
+  UserProfileServiceClient,
+} from 'src/common/interface/userProfile.interface';
 
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
 export class UserInfoService {
   private userInfoServiceClient: UserInfoServiceClient;
+  private userProfileServiceClient: UserProfileServiceClient;
 
   constructor(@Inject('USER_SERVICE') private client: ClientGrpc) {}
 
   onModuleInit() {
     this.userInfoServiceClient =
       this.client.getService<UserInfoServiceClient>('UserService');
+    this.userProfileServiceClient =
+      this.client.getService<UserProfileServiceClient>('UserService');
   }
 
   //USER INFO --------------------------------------------------------------
+
+  getAllUsers(params: GetAllUsersInfoRequest): Observable<UsersResponse> {
+    return this.userInfoServiceClient.getAllUsers(params);
+  }
 
   getAllUsersInfo(
     params: GetAllUsersInfoRequest,
@@ -46,7 +61,7 @@ export class UserInfoService {
     return this.userInfoServiceClient.getAllUsersInfo(params);
   }
 
-  getUserInfoById(id: string): Observable<UserInfoResponse> {
+  getUserInfoById(id: string): Observable<UserResponse> {
     const request: GetUserInfoIdRequest = { id };
     return this.userInfoServiceClient.getUserInfoId(request);
   }
@@ -70,6 +85,61 @@ export class UserInfoService {
         throw new RpcException('Internal server error');
       }),
     );
+  }
+
+  createUserWithProfile(
+    dto: CreateUserWithProfileDto,
+  ): Observable<UserInfoResponse> {
+    const createUserInfoRequest: CreateUserInfoRequest = {
+      username: dto.username,
+      profilePicture:
+        'https://res.cloudinary.com/dnjkwuc7p/image/upload/v1712043752/avatar/default_avatar.png',
+    };
+
+    return this.userInfoServiceClient
+      .createUserInfo(createUserInfoRequest)
+      .pipe(
+        switchMap((userInfoResponse) => {
+          const createUserProfileRequest: CreateUserProfileRequest = {
+            password: dto.password,
+            fullName: dto.fullName,
+            email: dto.email,
+            phoneNumber: dto.phoneNumber,
+            bio: dto.bio,
+            role: dto.role,
+            birthDate: dto.birthDate
+              ? formatISO(new Date(dto.birthDate))
+              : null,
+            location: dto.location,
+            website: dto.website,
+            socialLinks: dto.socialLinks,
+            lastLogin: dto.lastLogin
+              ? formatISO(new Date(dto.lastLogin))
+              : null,
+            profileVisibility: dto.profileVisibility,
+            gender: dto.gender,
+            isActive: dto.isActive,
+            userInfoId: userInfoResponse.id,
+          };
+
+          return this.userProfileServiceClient
+            .createUserProfile(createUserProfileRequest)
+            .pipe(
+              map((userProfileResponse) => {
+                return {
+                  ...userInfoResponse,
+                  userProfile: userProfileResponse,
+                };
+              }),
+            );
+        }),
+        catchError((error) => {
+          if (error instanceof HttpException) {
+            throw new RpcException(error.message);
+          }
+          throw new RpcException('Internal server error');
+        }),
+      );
   }
 
   updateUserInfo(

@@ -26,7 +26,8 @@ export class FollowController {
     const params: GetAllFollowRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      follower: query.follower || '',
+      following: query.following || '',
     };
     return this.followService.getAllFollow(params);
   }

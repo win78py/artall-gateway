@@ -14,7 +14,9 @@ export interface FollowServiceClient {
 export interface GetAllFollowRequest {
   page?: number;
   take?: number;
-  search?: string;
+  skip?: number;
+  follower?: string;
+  following?: string;
 }
 
 export interface GetFollowIdRequest {
@@ -40,6 +42,28 @@ export interface UpdateFollowRequest {
   followingId?: string;
 }
 
+export interface FollowerFollowingResponse {
+  id: string;
+  followerId: string;
+  followingId: string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  deletedAt: string;
+  deletedBy: string;
+  follower: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+  following: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+}
+
 export interface FollowResponse {
   id: string;
   followerId: string;
@@ -53,7 +77,7 @@ export interface FollowResponse {
 }
 
 export interface ManyFollowResponse {
-  data: FollowResponse[];
+  data: FollowerFollowingResponse[];
   meta: PageMeta;
   message: string;
 }
