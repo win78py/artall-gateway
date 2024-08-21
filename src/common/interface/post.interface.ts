@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 
 export interface PostServiceClient {
   getAllPosts(request: GetAllPostsRequest): Observable<PostsResponse>;
-  getPostId(request: GetPostIdRequest): Observable<PostResponse>;
+  getPostId(request: GetPostIdRequest): Observable<PostInfoResponse>;
   createPost(request: CreatePostRequest): Observable<PostResponse>;
   checkPostExists(
     request: CheckPostExistsRequest,
@@ -14,7 +14,7 @@ export interface PostServiceClient {
 export interface GetAllPostsRequest {
   page?: number;
   take?: number;
-  search?: string;
+  content?: string;
 }
 
 export interface GetPostIdRequest {
@@ -42,6 +42,24 @@ export interface UpdatePostRequest {
   userId?: string;
 }
 
+export interface PostInfoResponse {
+  id: string;
+  content: string;
+  mediaPath: string[];
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  deletedAt: string;
+  deletedBy: string;
+  userId: string;
+  userInfo: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+}
+
 export interface PostResponse {
   id: string;
   content: string;
@@ -65,7 +83,7 @@ export interface PageMeta {
 }
 
 export interface PostsResponse {
-  data: PostResponse[];
+  data: PostInfoResponse[];
   meta: PageMeta;
   message: string;
 }

@@ -40,7 +40,7 @@ service PostService {
 message GetAllPostsRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  string content = 3;
 }
 
 message GetPostIdRequest {
@@ -79,6 +79,13 @@ message PostResponse {
   string deletedAt = 8;
   string deletedBy = 9;
   string userId = 10;
+  UserInfo userInfo = 11;
+}
+
+message UserInfo {
+    string id = 1;
+    string username = 2;
+    string profilePicture = 3;
 }
 
 message PostsResponse {

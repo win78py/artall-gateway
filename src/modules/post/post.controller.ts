@@ -32,7 +32,7 @@ export class PostController {
     const params: GetAllPostsRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      content: query.content || '',
     };
     return this.postService.getAllPosts(params);
   }
