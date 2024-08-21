@@ -24,7 +24,8 @@ export interface UserProfileServiceClient {
 export interface GetAllUsersProfileRequest {
   page?: number;
   take?: number;
-  search?: string;
+  fullName?: string;
+  userInfoId?: string;
 }
 
 export interface GetUserProfileIdRequest {
@@ -99,17 +100,6 @@ export interface UserProfileResponse {
   updatedBy: string;
   deletedAt: string;
   deletedBy: string;
-  userInfo?: {
-    id: string;
-    username: string;
-    profilePicture: string;
-    createdAt: string;
-    createdBy: string;
-    updatedAt: string;
-    updatedBy: string;
-    deletedAt: string;
-    deletedBy: string;
-  };
 }
 
 export interface UsersProfileResponse {

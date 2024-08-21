@@ -16,16 +16,29 @@ import {
   DeleteUserInfoResponse,
   GetAllUsersInfoRequest,
   UserInfoResponse,
+  UserResponse,
   UsersInfoResponse,
+  UsersResponse,
 } from '../../common/interface/useInfor.interface';
 import { Multer } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserInfoDto } from './dto/update-userInfo.dto';
 import { CreateUserInfoDto } from './dto/create-user_info.dto';
+import { CreateUserWithProfileDto } from './dto/create-user.dto';
 
 @Controller('user-info')
 export class UserInfoController {
   constructor(private readonly userInfoService: UserInfoService) {}
+
+  @Get('user')
+  getAllUsers(@Query() query): Observable<UsersResponse> {
+    const params: GetAllUsersInfoRequest = {
+      page: query.page || 1,
+      take: query.take || 10,
+      search: query.search || '',
+    };
+    return this.userInfoService.getAllUsers(params);
+  }
 
   @Get()
   getAllUsersInfo(@Query() query): Observable<UsersInfoResponse> {
@@ -38,7 +51,7 @@ export class UserInfoController {
   }
 
   @Get(':id')
-  getUserInfoById(@Param('id') id: string): Observable<UserInfoResponse> {
+  getUserInfoById(@Param('id') id: string): Observable<UserResponse> {
     return this.userInfoService.getUserInfoById(id);
   }
 
@@ -47,6 +60,13 @@ export class UserInfoController {
     @Body() body: CreateUserInfoDto,
   ): Observable<UserInfoResponse> {
     return this.userInfoService.createUserInfo(body);
+  }
+
+  @Post('create-with-profile')
+  createUserWithProfile(
+    @Body() body: CreateUserWithProfileDto,
+  ): Observable<UserInfoResponse> {
+    return this.userInfoService.createUserWithProfile(body);
   }
 
   @Patch(':id')

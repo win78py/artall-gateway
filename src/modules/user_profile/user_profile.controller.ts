@@ -28,7 +28,8 @@ export class UserProfileController {
     const params: GetAllUsersProfileRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      fullName: query.fullName || '',
+      userInfoId: query.userInfoId || '',
     };
     return this.userProfileService.getAllUsersProfile(params);
   }
