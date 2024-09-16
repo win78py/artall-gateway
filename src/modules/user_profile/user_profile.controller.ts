@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import {
   DeleteUserProfileResponse,
   GetAllUsersProfileRequest,
+  GetUserProfileByEmailResponse,
   UserProfileResponse,
   UsersProfileResponse,
 } from '../../common/interface/userProfile.interface';
@@ -37,6 +38,13 @@ export class UserProfileController {
   @Get(':id')
   getUserProfileById(@Param('id') id: string): Observable<UserProfileResponse> {
     return this.userProfileService.getUserProfileById(id);
+  }
+
+  @Get('email/:email')
+  getUserProfileByEmail(
+    @Param('email') email: string,
+  ): Observable<GetUserProfileByEmailResponse> {
+    return this.userProfileService.getUserProfileByEmail(email);
   }
 
   @Post()

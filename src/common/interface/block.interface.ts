@@ -16,7 +16,9 @@ export interface BlockServiceClient {
 export interface GetAllBlockListRequest {
   page?: number;
   take?: number;
-  search?: string;
+  skip?: number;
+  blocker?: string;
+  blocked?: string;
 }
 
 export interface GetBlockIdRequest {
@@ -42,6 +44,26 @@ export interface UpdateBlockRequest {
   blockedId?: string;
 }
 
+export interface BlockerBlockedResponse {
+  id: string;
+  blockerId: string;
+  blockedId: string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  deletedAt: string;
+  deletedBy: string;
+  blocker: {
+    username: string;
+    profilePicture: string;
+  };
+  blocked: {
+    username: string;
+    profilePicture: string;
+  };
+}
+
 export interface BlockResponse {
   id: string;
   blockerId: string;
@@ -55,7 +77,7 @@ export interface BlockResponse {
 }
 
 export interface ManyBlockResponse {
-  data: BlockResponse[];
+  data: BlockerBlockedResponse[];
   meta: PageMeta;
   message: string;
 }

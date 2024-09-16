@@ -15,7 +15,6 @@ export class CreateUserWithProfileDto {
 
   fullName: string;
 
-  @IsNotEmpty()
   email: string;
 
   phoneNumber: string;

@@ -17,10 +17,11 @@ import {
   UpdateUserInfoRequest,
   UserInfoResponse,
   UserInfoServiceClient,
+  UserInfoWithProfileResponse,
   UserResponse,
   UsersInfoResponse,
   UsersResponse,
-} from 'src/common/interface/useInfor.interface';
+} from 'src/common/interface/userInfor.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
@@ -89,7 +90,7 @@ export class UserInfoService {
 
   createUserWithProfile(
     dto: CreateUserWithProfileDto,
-  ): Observable<UserInfoResponse> {
+  ): Observable<UserInfoWithProfileResponse> {
     const createUserInfoRequest: CreateUserInfoRequest = {
       username: dto.username,
       profilePicture:
@@ -127,9 +128,9 @@ export class UserInfoService {
             .pipe(
               map((userProfileResponse) => {
                 return {
-                  ...userInfoResponse,
-                  userProfile: userProfileResponse,
-                };
+                  userInfo: userInfoResponse, // Chứa thông tin userInfo
+                  userProfile: userProfileResponse, // Chứa thông tin userProfile
+                } as UserInfoWithProfileResponse;
               }),
             );
         }),

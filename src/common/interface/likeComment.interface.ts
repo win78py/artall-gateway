@@ -13,18 +13,16 @@ export interface LikeCommentServiceClient {
   checkLikeCommentExists(
     request: CheckLikeCommentExistsRequest,
   ): Observable<CheckLikeCommentExistsResponse>;
-  updateLikeComment(
-    request: UpdateLikeCommentRequest,
-  ): Observable<LikeCommentResponse>;
-  deleteLikeComment(
-    request: DeleteLikeCommentRequest,
-  ): Observable<DeleteLikeCommentResponse>;
+  toggleLikeComment(
+    request: CreateLikeCommentRequest,
+  ): Observable<ToggleLikeCommentResponse>;
 }
 
 export interface GetAllLikesCommentRequest {
   page?: number;
   take?: number;
-  search?: string;
+  skip?: number;
+  comment?: string;
 }
 
 export interface GetLikeCommentIdRequest {
@@ -42,12 +40,6 @@ export interface CheckLikeCommentExistsRequest {
 
 export interface CheckLikeCommentExistsResponse {
   exists: boolean;
-}
-
-export interface UpdateLikeCommentRequest {
-  id: string;
-  commentId?: string;
-  userId?: string;
 }
 
 export interface LikeCommentResponse {
@@ -68,12 +60,8 @@ export interface LikesCommentResponse {
   message: string;
 }
 
-export interface DeleteLikeCommentRequest {
-  id: string;
-}
-
-export interface DeleteLikeCommentResponse {
-  data: string | null;
+export interface ToggleLikeCommentResponse {
+  data: LikeCommentResponse | null;
   message: string;
 }
 

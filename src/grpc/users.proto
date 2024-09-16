@@ -15,6 +15,7 @@ service UserService {
   // User Profile --
   rpc GetAllUsersProfile (GetAllUsersProfileRequest) returns (UsersProfileResponse);
   rpc GetUserProfileId (GetUserProfileIdRequest) returns (UserProfileResponse);
+  rpc GetUserProfileEmail (GetUserProfileByEmailRequest) returns (GetUserProfileByEmailResponse);
   rpc CreateUserProfile (CreateUserProfileRequest) returns (UserProfileResponse);
   rpc CheckUserProfileExists (CheckUserProfileExistsRequest) returns (CheckUserProfileExistsResponse);
   rpc UpdateUserProfile (UpdateUserProfileRequest) returns (UserProfileResponse);
@@ -41,7 +42,9 @@ service UserService {
 message GetAllUsersInfoRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  int32 skip = 3;
+  string username = 4;
+  string fullName = 5;
 }
 
 message GetUserInfoIdRequest {
@@ -150,6 +153,14 @@ message GetUserProfileIdRequest {
   string id = 1;
 }
 
+message GetUserProfileByEmailRequest {
+  string email = 1;
+}
+
+message GetUserProfileByEmailResponse {
+  UserProfileResponse userProfile = 1;
+}
+
 message CreateUserProfileRequest {
   string password = 1;
   string fullName = 2;
@@ -193,6 +204,11 @@ message UpdateUserProfileRequest {
   string gender = 14;
   bool isActive = 15;
   string userInfoId = 16;
+}
+
+message UserInfoWithProfileResponse {
+  UserInfoResponse userInfo = 1;
+  UserProfileResponse userProfile = 2;
 }
 
 message UserInfo {
@@ -251,8 +267,9 @@ message DeleteUserProfileResponse {
 message GetAllFollowRequest {
   int32 page = 1;
   int32 take = 2;
-  string follower = 3;
-  string following = 4;
+  int32 skip = 3;
+  string follower = 4;
+  string following = 5;
 }
 
 message GetFollowIdRequest {
@@ -323,7 +340,9 @@ message DeleteFollowResponse {
 message GetAllBlockListRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  int32 skip = 3;
+  string blocker = 4;
+  string blocked = 5;
 }
 
 message GetBlockIdRequest {
@@ -349,6 +368,20 @@ message UpdateBlockRequest {
   string blockedId = 3;
 }
 
+message BlockerBlockedResponse {
+  string id = 1;
+  string blockerId = 2;
+  string blockedId = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  UserInfo blocker = 10;
+  UserInfo blocked = 11;
+}
+
 message BlockResponse {
   string id = 1;
   string blockerId = 2;
@@ -362,7 +395,7 @@ message BlockResponse {
 }
 
 message ManyBlockResponse {
-  repeated BlockResponse data = 1;
+  repeated BlockerBlockedResponse data = 1;
   PageMeta meta = 2;
   string message = 3;
 }

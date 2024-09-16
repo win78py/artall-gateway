@@ -15,6 +15,7 @@ import { UserProfileModule } from './modules/user_profile/user_profile.module';
 import { LikeModule } from './modules/like/like.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeCommentModule } from './modules/likeComment/likeComment.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { LikeCommentModule } from './modules/likeComment/likeComment.module';
     LikeModule,
     CommentModule,
     LikeCommentModule,
+    AuthModule,
     ClientsModule.register([
       {
         name: 'USER_SERVICE',

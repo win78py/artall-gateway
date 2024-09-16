@@ -16,8 +16,7 @@ service PostService {
   rpc GetLikeId (GetLikeIdRequest) returns (LikeResponse);
   rpc CreateLike (CreateLikeRequest) returns (LikeResponse);
   rpc CheckLikeExists (CheckLikeExistsRequest) returns (CheckLikeExistsResponse);
-  rpc UpdateLike (UpdateLikeRequest) returns (LikeResponse);
-  rpc DeleteLike (DeleteLikeRequest) returns (DeleteLikeResponse);
+  rpc ToggleLike (CreateLikeRequest) returns (ToggleLikeResponse);
 
   // Comment --
   rpc GetAllComments (GetAllCommentsRequest) returns (CommentsResponse);
@@ -32,8 +31,7 @@ service PostService {
   rpc GetLikeCommentId (GetLikeCommentIdRequest) returns (LikeCommentResponse);
   rpc CreateLikeComment (CreateLikeCommentRequest) returns (LikeCommentResponse);
   rpc CheckLikeCommentExists (CheckLikeCommentExistsRequest) returns (CheckLikeCommentExistsResponse);
-  rpc UpdateLikeComment (UpdateLikeCommentRequest) returns (LikeCommentResponse);
-  rpc DeleteLikeComment (DeleteLikeCommentRequest) returns (DeleteLikeCommentResponse);
+  rpc ToggleLikeComment (CreateLikeCommentRequest) returns (ToggleLikeCommentResponse);
 }
 
 // Post --
@@ -107,7 +105,8 @@ message DeletePostResponse {
 message GetAllLikesRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  int32 skip = 3;
+  string post = 4;
 }
 
 message GetLikeIdRequest {
@@ -125,12 +124,6 @@ message CheckLikeExistsRequest {
 
 message CheckLikeExistsResponse {
   bool exists = 1;
-}
-
-message UpdateLikeRequest {
-  string id = 1;
-  string postId = 2;
-  string userId = 3;
 }
 
 message LikeResponse {
@@ -151,12 +144,8 @@ message LikesResponse {
   string message = 3;
 }
 
-message DeleteLikeRequest {
-  string id = 1;
-}
-
-message DeleteLikeResponse {
-  string data = 1;
+message ToggleLikeResponse {
+  LikeResponse data = 1;
   string message = 2;
 }
 
@@ -164,7 +153,7 @@ message DeleteLikeResponse {
 message GetAllCommentsRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  string content = 3;
 }
 
 message GetCommentIdRequest {
@@ -194,6 +183,21 @@ message UpdateCommentRequest {
   string userId = 5;
 }
 
+message CommentInfoResponse {
+  string id = 1;
+  string content = 2;
+  repeated string mediaPath = 3;
+  string createdAt = 4;
+  string createdBy = 5;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  string postId = 10;
+  string userId = 11;
+  UserInfo user = 12;
+}
+
 message CommentResponse {
   string id = 1;
   string content = 2;
@@ -209,7 +213,7 @@ message CommentResponse {
 }
 
 message CommentsResponse {
-  repeated CommentResponse data = 1;
+  repeated CommentInfoResponse data = 1;
   PageMeta meta = 2;
   string message = 3;
 }
@@ -228,7 +232,8 @@ message DeleteCommentResponse {
 message GetAllLikesCommentRequest {
   int32 page = 1;
   int32 take = 2;
-  string search = 3;
+  int32 skip = 3;
+  string comment = 4;
 }
 
 message GetLikeCommentIdRequest {
@@ -246,12 +251,6 @@ message CheckLikeCommentExistsRequest {
 
 message CheckLikeCommentExistsResponse {
   bool exists = 1;
-}
-
-message UpdateLikeCommentRequest {
-  string id = 1;
-  string commentId = 2;
-  string userId = 3;
 }
 
 message LikeCommentResponse {
@@ -272,15 +271,10 @@ message LikesCommentResponse {
   string message = 3;
 }
 
-message DeleteLikeCommentRequest {
-  string id = 1;
-}
-
-message DeleteLikeCommentResponse {
-  string data = 1;
+message ToggleLikeCommentResponse {
+  LikeCommentResponse data = 1;
   string message = 2;
 }
-
 
 // DTOs --
 message PageMeta {

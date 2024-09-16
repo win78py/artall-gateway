@@ -14,6 +14,8 @@ import {
   CreateUserProfileRequest,
   DeleteUserProfileResponse,
   GetAllUsersProfileRequest,
+  GetUserProfileByEmailRequest,
+  GetUserProfileByEmailResponse,
   GetUserProfileIdRequest,
   UpdateUserProfileRequest,
   UserProfileResponse,
@@ -48,6 +50,13 @@ export class UserProfileService {
   getUserProfileById(id: string): Observable<UserProfileResponse> {
     const request: GetUserProfileIdRequest = { id };
     return this.userProfileServiceClient.getUserProfileId(request);
+  }
+
+  getUserProfileByEmail(
+    email: string,
+  ): Observable<GetUserProfileByEmailResponse> {
+    const request: GetUserProfileByEmailRequest = { email };
+    return this.userProfileServiceClient.getUserProfileEmail(request);
   }
 
   createUserProfile(

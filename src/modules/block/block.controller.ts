@@ -26,7 +26,8 @@ export class BlockController {
     const params: GetAllBlockListRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      blocker: query.blocker || '',
+      blocked: query.blocked || '',
     };
     return this.blockService.getAllBlockList(params);
   }
