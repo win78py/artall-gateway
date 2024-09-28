@@ -1,26 +1,17 @@
-import {
-  BadRequestException,
-  HttpException,
-  Inject,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientGrpc, RpcException } from '@nestjs/microservices';
-import { catchError, map, Observable, switchMap } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import {
-  CheckLikeCommentExistsResponse,
   CreateLikeCommentRequest,
-  DeleteLikeCommentResponse,
   GetAllLikesCommentRequest,
   GetLikeCommentIdRequest,
   LikeCommentResponse,
   LikesCommentResponse,
   LikeCommentServiceClient,
+  ToggleLikeCommentResponse,
 } from '../../common/interface/likeComment.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
-import { validate as uuidValidate } from 'uuid';
 import { CreateLikeCommentDto } from './dto/create-likeComment.dto';
 
 @Injectable()
@@ -64,38 +55,25 @@ export class LikeCommentService {
     );
   }
 
-  deleteLikeComment(id: string): Observable<DeleteLikeCommentResponse> {
-    if (!uuidValidate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
+  toggleLikeComment(
+    dto: CreateLikeCommentDto,
+  ): Observable<ToggleLikeCommentResponse> {
+    const request: CreateLikeCommentRequest = {
+      commentId: dto.commentId,
+      userId: dto.userId,
+    };
 
-    const checkRequest = { id };
-
-    return this.likeCommentServiceClient
-      .checkLikeCommentExists(checkRequest)
-      .pipe(
-        switchMap((response: CheckLikeCommentExistsResponse) => {
-          if (!response.exists) {
-            throw new NotFoundException(`Like with ID ${id} not found`);
-          }
-
-          const deleteRequest = { id };
-
-          return this.likeCommentServiceClient
-            .deleteLikeComment(deleteRequest)
-            .pipe(
-              map(() => ({
-                data: null,
-                message: 'Like Comment deletion successful',
-              })),
-              catchError((error) => {
-                if (error instanceof HttpException) {
-                  throw new RpcException(error.message);
-                }
-                throw new RpcException('Internal server error');
-              }),
-            );
-        }),
-      );
+    return this.likeCommentServiceClient.toggleLikeComment(request).pipe(
+      map((response) => ({
+        data: response.data,
+        message: response.message,
+      })),
+      catchError((error) => {
+        if (error instanceof HttpException) {
+          throw new RpcException(error.message);
+        }
+        throw new RpcException('Internal server error');
+      }),
+    );
   }
 }

@@ -1,19 +1,11 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Query,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { Observable } from 'rxjs';
 import {
-  DeleteLikeResponse,
   GetAllLikesRequest,
   LikeResponse,
   LikesResponse,
+  ToggleLikeResponse,
 } from '../../common/interface/like.interface';
 import { CreateLikeDto } from './dto/create-like.dto';
 
@@ -26,7 +18,8 @@ export class LikeController {
     const params: GetAllLikesRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      skip: query.skip || 0,
+      post: query.post || '',
     };
     return this.likeService.getAllLikes(params);
   }
@@ -41,8 +34,8 @@ export class LikeController {
     return this.likeService.createLike(body);
   }
 
-  @Delete(':id')
-  deleteLike(@Param('id') id: string): Observable<DeleteLikeResponse> {
-    return this.likeService.deleteLike(id);
+  @Post('toggle')
+  toggleLike(@Body() body: CreateLikeDto): Observable<ToggleLikeResponse> {
+    return this.likeService.toggleLike(body);
   }
 }

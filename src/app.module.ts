@@ -6,6 +6,7 @@ import { BlockModule } from './modules/block/block.module';
 import { PostModule } from './modules/post/post.module';
 import { ClientsModule } from '@nestjs/microservices';
 import {
+  grpcMailClientOptions,
   grpcPostClientOptions,
   grpcUserClientOptions,
 } from './grpc/grpc-client.options';
@@ -15,6 +16,7 @@ import { UserProfileModule } from './modules/user_profile/user_profile.module';
 import { LikeModule } from './modules/like/like.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeCommentModule } from './modules/likeComment/likeComment.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { LikeCommentModule } from './modules/likeComment/likeComment.module';
     LikeModule,
     CommentModule,
     LikeCommentModule,
+    AuthModule,
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
@@ -37,6 +40,10 @@ import { LikeCommentModule } from './modules/likeComment/likeComment.module';
       {
         name: 'POST_SERVICE',
         ...grpcPostClientOptions,
+      },
+      {
+        name: 'MAIL_SERVICE',
+        ...grpcMailClientOptions,
       },
     ]),
   ],

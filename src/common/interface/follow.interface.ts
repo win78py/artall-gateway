@@ -53,12 +53,10 @@ export interface FollowerFollowingResponse {
   deletedAt: string;
   deletedBy: string;
   follower: {
-    id: string;
     username: string;
     profilePicture: string;
   };
   following: {
-    id: string;
     username: string;
     profilePicture: string;
   };

@@ -7,14 +7,14 @@ export interface LikeServiceClient {
   checkLikeExists(
     request: CheckLikeExistsRequest,
   ): Observable<CheckLikeExistsResponse>;
-  updateLike(request: UpdateLikeRequest): Observable<LikeResponse>;
-  deleteLike(request: DeleteLikeRequest): Observable<DeleteLikeResponse>;
+  toggleLike(request: CreateLikeRequest): Observable<ToggleLikeResponse>;
 }
 
 export interface GetAllLikesRequest {
   page?: number;
   take?: number;
-  search?: string;
+  skip?: number;
+  post?: string;
 }
 
 export interface GetLikeIdRequest {
@@ -32,12 +32,6 @@ export interface CheckLikeExistsRequest {
 
 export interface CheckLikeExistsResponse {
   exists: boolean;
-}
-
-export interface UpdateLikeRequest {
-  id: string;
-  postId?: string;
-  userId?: string;
 }
 
 export interface LikeResponse {
@@ -58,12 +52,8 @@ export interface LikesResponse {
   message: string;
 }
 
-export interface DeleteLikeRequest {
-  id: string;
-}
-
-export interface DeleteLikeResponse {
-  data: string | null;
+export interface ToggleLikeResponse {
+  data: LikeResponse | null;
   message: string;
 }
 

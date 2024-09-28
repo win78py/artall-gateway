@@ -16,7 +16,7 @@ export interface CommentServiceClient {
 export interface GetAllCommentsRequest {
   page?: number;
   take?: number;
-  search?: string;
+  content?: string;
 }
 
 export interface GetCommentIdRequest {
@@ -46,6 +46,25 @@ export interface UpdateCommentRequest {
   userId?: string;
 }
 
+export interface CommentInfoResponse {
+  id: string;
+  content: string;
+  mediaPath: string[];
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  deletedAt: string;
+  deletedBy: string;
+  postId: string;
+  userId: string;
+  user: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+}
+
 export interface CommentResponse {
   id: string;
   content: string;
@@ -70,7 +89,7 @@ export interface PageMeta {
 }
 
 export interface CommentsResponse {
-  data: CommentResponse[];
+  data: CommentInfoResponse[];
   meta: PageMeta;
   message: string;
 }

@@ -7,6 +7,9 @@ export interface UserProfileServiceClient {
   getUserProfileId(
     request: GetUserProfileIdRequest,
   ): Observable<UserProfileResponse>;
+  getUserProfileEmail(
+    request: GetUserProfileByEmailRequest,
+  ): Observable<GetUserProfileByEmailResponse>;
   createUserProfile(
     request: CreateUserProfileRequest,
   ): Observable<UserProfileResponse>;
@@ -30,6 +33,14 @@ export interface GetAllUsersProfileRequest {
 
 export interface GetUserProfileIdRequest {
   id: string;
+}
+
+export interface GetUserProfileByEmailRequest {
+  email: string;
+}
+
+export interface GetUserProfileByEmailResponse {
+  userProfile: UserProfileResponse | null;
 }
 
 export interface CreateUserProfileRequest {

@@ -16,10 +16,11 @@ import {
   DeleteUserInfoResponse,
   GetAllUsersInfoRequest,
   UserInfoResponse,
+  UserInfoWithProfileResponse,
   UserResponse,
   UsersInfoResponse,
   UsersResponse,
-} from '../../common/interface/useInfor.interface';
+} from '../../common/interface/userInfor.interface';
 import { Multer } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserInfoDto } from './dto/update-userInfo.dto';
@@ -35,7 +36,7 @@ export class UserInfoController {
     const params: GetAllUsersInfoRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      username: query.username || '',
     };
     return this.userInfoService.getAllUsers(params);
   }
@@ -45,7 +46,8 @@ export class UserInfoController {
     const params: GetAllUsersInfoRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      username: query.username || '',
+      fullName: query.fullName || '',
     };
     return this.userInfoService.getAllUsersInfo(params);
   }
@@ -65,7 +67,7 @@ export class UserInfoController {
   @Post('create-with-profile')
   createUserWithProfile(
     @Body() body: CreateUserWithProfileDto,
-  ): Observable<UserInfoResponse> {
+  ): Observable<UserInfoWithProfileResponse> {
     return this.userInfoService.createUserWithProfile(body);
   }
 

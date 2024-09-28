@@ -32,7 +32,7 @@ export class CommentController {
     const params: GetAllCommentsRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      search: query.search || '',
+      content: query.content || '',
     };
     return this.commentService.getAllComments(params);
   }

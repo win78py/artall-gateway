@@ -1,26 +1,17 @@
-import {
-  BadRequestException,
-  HttpException,
-  Inject,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientGrpc, RpcException } from '@nestjs/microservices';
-import { catchError, map, Observable, switchMap } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import {
-  CheckLikeExistsResponse,
   CreateLikeRequest,
-  DeleteLikeResponse,
   GetAllLikesRequest,
   GetLikeIdRequest,
   LikeResponse,
   LikeServiceClient,
   LikesResponse,
+  ToggleLikeResponse,
 } from 'src/common/interface/like.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
-import { validate as uuidValidate } from 'uuid';
 import { CreateLikeDto } from './dto/create-like.dto';
 
 @Injectable()
@@ -60,33 +51,22 @@ export class LikeService {
     );
   }
 
-  deleteLike(id: string): Observable<DeleteLikeResponse> {
-    if (!uuidValidate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
+  toggleLike(dto: CreateLikeDto): Observable<ToggleLikeResponse> {
+    const request: CreateLikeRequest = {
+      postId: dto.postId,
+      userId: dto.userId,
+    };
 
-    const checkRequest = { id };
-
-    return this.likeServiceClient.checkLikeExists(checkRequest).pipe(
-      switchMap((response: CheckLikeExistsResponse) => {
-        if (!response.exists) {
-          throw new NotFoundException(`Like with ID ${id} not found`);
+    return this.likeServiceClient.toggleLike(request).pipe(
+      map((response) => ({
+        data: response.data,
+        message: response.message,
+      })),
+      catchError((error) => {
+        if (error instanceof HttpException) {
+          throw new RpcException(error.message);
         }
-
-        const deleteRequest = { id };
-
-        return this.likeServiceClient.deleteLike(deleteRequest).pipe(
-          map(() => ({
-            data: null,
-            message: 'Like deletion successful',
-          })),
-          catchError((error) => {
-            if (error instanceof HttpException) {
-              throw new RpcException(error.message);
-            }
-            throw new RpcException('Internal server error');
-          }),
-        );
+        throw new RpcException('Internal server error');
       }),
     );
   }

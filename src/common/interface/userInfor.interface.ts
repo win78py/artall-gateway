@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { UserProfileResponse } from './userProfile.interface';
 
 export interface UserInfoServiceClient {
   getAllUsers(request: GetAllUsersInfoRequest): Observable<UsersResponse>;
@@ -19,7 +20,9 @@ export interface UserInfoServiceClient {
 export interface GetAllUsersInfoRequest {
   page?: number;
   take?: number;
-  search?: string;
+  skip?: number;
+  username?: string;
+  fullName?: string;
 }
 
 export interface GetUserInfoIdRequest {
@@ -43,6 +46,11 @@ export interface UpdateUserInfoRequest {
   id: string;
   username?: string;
   profilePicture?: Buffer;
+}
+
+export interface UserInfoWithProfileResponse {
+  userInfo: UserInfoResponse;
+  userProfile: UserProfileResponse;
 }
 
 export interface UserInfoResponse {
