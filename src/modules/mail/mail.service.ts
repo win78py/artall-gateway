@@ -1,29 +1,24 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
+import {
+  SendMailRequest,
+  SendMailResponse,
+} from 'src/common/interface/mail.interface';
+import { grpcMailClientOptions } from 'src/grpc/grpc-client.options';
 
 @Injectable()
 export class MailService {
-  constructor(
-    private mailerService: MailerService,
-    private readonly configService: ConfigService,
-  ) {}
+  @Client(grpcMailClientOptions)
+  private readonly client: ClientGrpc;
 
-  async sendMail(
-    contributionId: string,
-    studentEmail: string,
-    studentName: string,
-  ) {
-    const baseUrl = this.configService.get('BASE_URL');
-    await this.mailerService.sendMail({
-      to: studentEmail,
-      subject: 'Your contribution has been reject!',
-      template: './rejectMail.hbs',
-      context: {
-        contributionId: contributionId,
-        name: studentName,
-        baseUrl: baseUrl,
-      },
-    });
+  private mailServiceClient: any;
+
+  onModuleInit() {
+    this.mailServiceClient = this.client.getService('MailService');
+  }
+
+  sendMail(data: SendMailRequest): Observable<SendMailResponse> {
+    return this.mailServiceClient.sendMail(data);
   }
 }

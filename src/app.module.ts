@@ -6,6 +6,7 @@ import { BlockModule } from './modules/block/block.module';
 import { PostModule } from './modules/post/post.module';
 import { ClientsModule } from '@nestjs/microservices';
 import {
+  grpcMailClientOptions,
   grpcPostClientOptions,
   grpcUserClientOptions,
 } from './grpc/grpc-client.options';
@@ -39,6 +40,10 @@ import { AuthModule } from './modules/auth/auth.module';
       {
         name: 'POST_SERVICE',
         ...grpcPostClientOptions,
+      },
+      {
+        name: 'MAIL_SERVICE',
+        ...grpcMailClientOptions,
       },
     ]),
   ],

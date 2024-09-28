@@ -28,6 +28,7 @@ import { validate as uuidValidate } from 'uuid';
 import { CreateUserProfileDto } from './dto/create-user_profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user_profile.dto';
 import { formatISO } from 'date-fns';
+import * as crypto from 'crypto';
 
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
@@ -110,8 +111,13 @@ export class UserProfileService {
 
           const updateRequest: UpdateUserProfileRequest = { id };
 
+          // if (dto.password && dto.password.trim() !== '') {
+          //   updateRequest.password = dto.password;
+          // }
           if (dto.password && dto.password.trim() !== '') {
-            updateRequest.password = dto.password;
+            const salt = crypto.randomBytes(16).toString('hex');
+            const hashedPassword = this.hashPassword(dto.password, salt);
+            updateRequest.password = `${hashedPassword}.${salt}`; // Store hash and salt together
           }
           if (dto.fullName && dto.fullName.trim() !== '') {
             updateRequest.fullName = dto.fullName;
@@ -168,6 +174,11 @@ export class UserProfileService {
             );
         }),
       );
+  }
+  private hashPassword(password: string, salt: string): string {
+    return crypto
+      .pbkdf2Sync(password, salt, 10000, 64, 'sha512')
+      .toString('hex');
   }
 
   deleteUserProfile(id: string): Observable<DeleteUserProfileResponse> {

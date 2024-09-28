@@ -1,39 +1,19 @@
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { Global, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { join } from 'path';
+import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
+import { MailController } from './mail.controller';
+import { grpcMailClientOptions } from 'src/grpc/grpc-client.options';
+import { ClientsModule } from '@nestjs/microservices';
 
-@Global()
 @Module({
   imports: [
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => ({
-        transport: {
-          host: config.get<string>('MAIL_HOST'),
-          secure: false,
-          auth: {
-            user: config.get<string>('MAIL_USER'),
-            pass: config.get<string>('MAIL_PASSWORD'),
-          },
-        },
-        defaults: {
-          from: `"OTC" <${config.get<string>('MAIL_FROM')}>`,
-        },
-        template: {
-          dir: join(__dirname, 'templates'),
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true,
-          },
-        },
-      }),
-    }),
+    ClientsModule.register([
+      {
+        name: 'MAIL_SERVICE',
+        ...grpcMailClientOptions,
+      },
+    ]),
   ],
-  providers: [MailService, ConfigService],
-  exports: [MailService],
+  controllers: [MailController],
+  providers: [MailService],
 })
 export class MailModule {}

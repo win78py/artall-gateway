@@ -1936,6 +1936,7 @@ array-union@^2.1.0:
     artall_server "file:"
     class-transformer "^0.5.1"
     class-validator "^0.14.1"
+    crypto "^1.0.1"
     date-fns "^3.6.0"
     express-session "^1.18.0"
     nodemailer "^6.9.14"
@@ -2691,6 +2692,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/crypto/-/crypto-1.0.1.tgz"
+  integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
 
 css-select@^5.1.0:
   version "5.1.0"
