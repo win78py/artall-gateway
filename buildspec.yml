@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build:
+    commands:
+      - echo log in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+  build:
+    commands:
+      - docker build -t my-app .
+      - docker tag my-app:latest $REPOSITORY_URI:latest
+  post_build:
+    commands:
+      - docker push $REPOSITORY_URI:latest
+      - printf '[{"name":"my-app","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
+cache:
+  paths:
+    - '/root/.npm/**/*'
+    - 'dist/**/*'

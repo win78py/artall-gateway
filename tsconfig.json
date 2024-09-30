@@ -10,6 +10,9 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"] // Thêm đường dẫn tương ứng
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
