@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
-import { grpcMailClientOptions } from 'src/grpc/grpc-client.options';
+import { grpcMailClientOptions } from '../../grpc/grpc-client.options';
 import { ClientsModule } from '@nestjs/microservices';
 
 @Module({

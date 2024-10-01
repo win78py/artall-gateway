@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import {
   SendMailRequest,
   SendMailResponse,
-} from 'src/common/interface/mail.interface';
-import { grpcMailClientOptions } from 'src/grpc/grpc-client.options';
+} from '../../common/interface/mail.interface';
+import { grpcMailClientOptions } from '../../grpc/grpc-client.options';
 
 @Injectable()
 export class MailService {

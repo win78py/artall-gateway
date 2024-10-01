@@ -2,11 +2,11 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Profile } from 'passport-google-oauth20';
-import { UserInfoServiceClient } from 'src/common/interface/userInfor.interface';
-import { UserProfileServiceClient } from 'src/common/interface/userProfile.interface';
+import { UserInfoServiceClient } from '../../common/interface/userInfor.interface';
+import { UserProfileServiceClient } from '../../common/interface/userProfile.interface';
 import { lastValueFrom } from 'rxjs';
 import { CreateUserWithProfileDto } from '../user_info/dto/create-user.dto';
-import { profileVisibilityEnum, RoleEnum } from 'src/common/enum/enum';
+import { profileVisibilityEnum, RoleEnum } from '../../common/enum/enum';
 import { UserInfoService } from '../user_info/user_info.service';
 import { UserProfileService } from '../user_profile/user_profile.service';
 import * as crypto from 'crypto';

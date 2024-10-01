@@ -3,7 +3,7 @@ import {
   GenderEnum,
   RoleEnum,
   profileVisibilityEnum,
-} from 'src/common/enum/enum';
+} from '../../..//common/enum/enum';
 
 export class CreateUserProfileDto {
   @IsNotEmpty()

@@ -19,7 +19,7 @@ import {
   UpdateCommentRequest,
   CommentResponse,
   CommentsResponse,
-} from 'src/common/interface/comment.interface';
+} from '../../common/interface/comment.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';

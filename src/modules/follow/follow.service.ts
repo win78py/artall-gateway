@@ -17,7 +17,7 @@ import {
   FollowResponse,
   FollowServiceClient,
   ManyFollowResponse,
-} from 'src/common/interface/follow.interface';
+} from '../../common/interface/follow.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
 import { validate as uuidValidate } from 'uuid';

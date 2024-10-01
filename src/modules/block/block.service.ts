@@ -17,7 +17,7 @@ import {
   BlockResponse,
   BlockServiceClient,
   ManyBlockResponse,
-} from 'src/common/interface/block.interface';
+} from '../../common/interface/block.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
 import { validate as uuidValidate } from 'uuid';
