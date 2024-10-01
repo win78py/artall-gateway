@@ -19,7 +19,7 @@ import {
   UpdatePostRequest,
   PostResponse,
   PostsResponse,
-} from 'src/common/interface/post.interface';
+} from '../../common/interface/post.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';

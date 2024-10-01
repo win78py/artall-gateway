@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { grpcUserClientOptions } from 'src/grpc/grpc-client.options';
+import { grpcUserClientOptions } from '../../grpc/grpc-client.options';
 import { ClientsModule } from '@nestjs/microservices';
 import { GoogleStrategy } from './utils/google.strategy';
 import { UserInfoService } from '../user_info/user_info.service';

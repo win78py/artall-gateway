@@ -3,7 +3,7 @@ import {
   GenderEnum,
   profileVisibilityEnum,
   RoleEnum,
-} from 'src/common/enum/enum';
+} from '../../..//common/enum/enum';
 
 export class CreateUserWithProfileDto {
   @IsString()

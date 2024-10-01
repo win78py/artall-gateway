@@ -1,4 +1,4 @@
-import { GenderEnum, profileVisibilityEnum } from 'src/common/enum/enum';
+import { GenderEnum, profileVisibilityEnum } from '../../../common/enum/enum';
 import { PageOptionsDto } from '../../../common/dtos/pageOption';
 
 export class GetUserProfileParams extends PageOptionsDto {

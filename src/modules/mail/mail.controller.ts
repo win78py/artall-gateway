@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   SendMailRequest,
   SendMailResponse,
-} from 'src/common/interface/mail.interface';
+} from '../../common/interface/mail.interface';
 
 @Controller('mail')
 export class MailController {

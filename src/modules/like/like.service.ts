@@ -9,7 +9,7 @@ import {
   LikeServiceClient,
   LikesResponse,
   ToggleLikeResponse,
-} from 'src/common/interface/like.interface';
+} from '../../common/interface/like.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
 import { CreateLikeDto } from './dto/create-like.dto';

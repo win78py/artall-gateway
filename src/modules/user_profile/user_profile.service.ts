@@ -21,7 +21,7 @@ import {
   UserProfileResponse,
   UserProfileServiceClient,
   UsersProfileResponse,
-} from 'src/common/interface/userProfile.interface';
+} from '../../common/interface/userProfile.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
 import { validate as uuidValidate } from 'uuid';

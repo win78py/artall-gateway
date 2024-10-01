@@ -21,7 +21,7 @@ import {
   UserResponse,
   UsersInfoResponse,
   UsersResponse,
-} from 'src/common/interface/userInfor.interface';
+} from '../../common/interface/userInfor.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
@@ -33,7 +33,7 @@ import { formatISO } from 'date-fns';
 import {
   CreateUserProfileRequest,
   UserProfileServiceClient,
-} from 'src/common/interface/userProfile.interface';
+} from '../../common/interface/userProfile.interface';
 
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
