@@ -16,8 +16,8 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
   build:
     commands:
-      - docker build -t my-app .
-      - docker tag my-app:latest $REPOSITORY_URI:latest
+      - docker build -t artall-gateway .
+      - docker tag artall-gateway:latest $REPOSITORY_URI:latest
   post_build:
     commands:
       - docker push $REPOSITORY_URI:latest
