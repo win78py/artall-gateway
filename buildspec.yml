@@ -21,7 +21,7 @@ phases:
   post_build:
     commands:
       - docker push $REPOSITORY_URI:latest
-      - printf '[{"name":"my-app","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - printf '[{"name":"artall-gateway","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 
 artifacts:
   files:
