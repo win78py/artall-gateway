@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 
-const AWS_URL_USER = process.env.AWS_URL_USER;
 export const grpcUserClientOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
@@ -12,7 +11,7 @@ export const grpcUserClientOptions: ClientOptions = {
       keepCase: true,
       defaults: true,
     },
-    url: `${AWS_URL_USER}:50051`,
+    url: '0.0.0.0:50051',
     maxReceiveMessageLength: 20 * 1024 * 1024,
     maxSendMessageLength: 20 * 1024 * 1024,
   },
