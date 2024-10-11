@@ -40,6 +40,10 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new GatewayExceptionFilter());
+  const server = app.getHttpServer();
+  server.keepAliveTimeout = 65000;
+  server.headersTimeout = 66000;
+
   await app.listen(5000);
 }
 bootstrap();
