@@ -11,7 +11,7 @@ export const grpcUserClientOptions: ClientOptions = {
       keepCase: true,
       defaults: true,
     },
-    url: 'localhost:50051',
+    url: 'artall.id.vn/user-svc:50051',
     maxReceiveMessageLength: 20 * 1024 * 1024,
     maxSendMessageLength: 20 * 1024 * 1024,
   },
