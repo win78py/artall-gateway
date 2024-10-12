@@ -11,7 +11,7 @@ export const grpcUserClientOptions: ClientOptions = {
       keepCase: true,
       defaults: true,
     },
-    url: 'c388-117-3-64-215.ngrok-free.app:50051',
+    url: '9c4a-117-3-64-215.ngrok-free.app:50051',
     maxReceiveMessageLength: 20 * 1024 * 1024,
     maxSendMessageLength: 20 * 1024 * 1024,
   },
