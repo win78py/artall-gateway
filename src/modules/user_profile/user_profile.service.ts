@@ -18,6 +18,7 @@ import {
   GetUserProfileByEmailResponse,
   GetUserProfileIdRequest,
   UpdateUserProfileRequest,
+  UserDemographicsResponse,
   UserProfileResponse,
   UserProfileServiceClient,
   UsersProfileResponse,
@@ -46,6 +47,12 @@ export class UserProfileService {
     params: GetAllUsersProfileRequest,
   ): Observable<UsersProfileResponse> {
     return this.userProfileServiceClient.getAllUsersProfile(params);
+  }
+
+  getUserDemographics(
+    params: GetAllUsersProfileRequest,
+  ): Observable<UserDemographicsResponse> {
+    return this.userProfileServiceClient.getUserDemographics(params);
   }
 
   getUserProfileById(id: string): Observable<UserProfileResponse> {

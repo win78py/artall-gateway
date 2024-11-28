@@ -2,6 +2,9 @@ import { Observable } from 'rxjs';
 
 export interface PostServiceClient {
   getAllPosts(request: GetAllPostsRequest): Observable<PostsResponse>;
+  getRandomPosts(request: GetAllPostsRequest): Observable<PostsResponse>;
+  getPostsDeleted(request: GetAllPostsRequest): Observable<PostsResponse>;
+  getTotalPosts(request: GetTotalPostsRequest): Observable<TotalPostsResponse>;
   getPostId(request: GetPostIdRequest): Observable<PostInfoResponse>;
   createPost(request: CreatePostRequest): Observable<PostResponse>;
   checkPostExists(
@@ -14,11 +17,18 @@ export interface PostServiceClient {
 export interface GetAllPostsRequest {
   page?: number;
   take?: number;
+  skip?: number;
   content?: string;
+  userId?: string;
+}
+
+export interface GetTotalPostsRequest {
+  period?: string;
 }
 
 export interface GetPostIdRequest {
   id: string;
+  userId: string;
 }
 
 export interface CreatePostRequest {
@@ -58,6 +68,9 @@ export interface PostInfoResponse {
     username: string;
     profilePicture: string;
   };
+  likeCount: number;
+  commentCount: number;
+  isLiked: boolean;
 }
 
 export interface PostResponse {
@@ -71,6 +84,19 @@ export interface PostResponse {
   deletedAt: string;
   deletedBy: string;
   userId: string;
+  userInfo: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+}
+
+export interface TotalPostsResponse {
+  total: number;
+  oldCount: number;
+  currentCount: number;
+  percentagePostChange: number;
+  joinCounts?: Record<number, number>;
 }
 
 export interface PageMeta {

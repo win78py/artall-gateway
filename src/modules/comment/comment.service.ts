@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { catchError, map, Observable, switchMap } from 'rxjs';
@@ -26,6 +27,7 @@ import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exceptio
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { validate as uuidValidate } from 'uuid';
+import { JwtStrategy } from 'modules/auth/utils/jwt.stratery';
 
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
@@ -39,7 +41,17 @@ export class CommentService {
       this.client.getService<CommentServiceClient>('PostService');
   }
 
-  getAllComments(params: GetAllCommentsRequest): Observable<CommentsResponse> {
+  getAllComments(
+    params: GetAllCommentsRequest,
+    request,
+  ): Observable<CommentsResponse> {
+    const token = request.headers.authorization.split(' ')[1];
+
+    const userId = JwtStrategy.getUserIdFromToken(token);
+
+    if (!userId) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
     return this.commentServiceClient.getAllComments(params);
   }
 

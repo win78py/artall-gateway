@@ -1,5 +1,10 @@
 // auth.service.ts
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  UseFilters,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Profile } from 'passport-google-oauth20';
 import { UserInfoServiceClient } from '../../common/interface/userInfor.interface';
@@ -10,8 +15,15 @@ import { profileVisibilityEnum, RoleEnum } from '../../common/enum/enum';
 import { UserInfoService } from '../user_info/user_info.service';
 import { UserProfileService } from '../user_profile/user_profile.service';
 import * as crypto from 'crypto';
-
+import { MailService } from 'modules/mail/mail.service';
+import {
+  SendMailRequest,
+  SendMailResponse,
+} from 'common/interface/mail.interface';
+import { ConfigService } from '@nestjs/config';
+import { GatewayExceptionFilter } from 'common/exceptions/gateway.exception';
 @Injectable()
+@UseFilters(GatewayExceptionFilter)
 export class AuthService {
   constructor(
     @Inject('USER_SERVICE')
@@ -20,8 +32,9 @@ export class AuthService {
     private readonly userProfileServiceClient: UserProfileServiceClient,
     private readonly userInfoService: UserInfoService,
     private readonly userProfileService: UserProfileService,
-
+    private readonly mailService: MailService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   // async signIn(username: string, pass: string): Promise<any> {
@@ -79,37 +92,30 @@ export class AuthService {
   async signIn(username: string, pass: string): Promise<any> {
     console.log(`Attempting login with username: ${username}`);
 
-    // Lấy tất cả thông tin user với username được cung cấp
     const allUsersResponse = await lastValueFrom(
       this.userInfoService.getAllUsers({ username }),
     );
 
-    // Tìm kiếm user có username khớp
     const userInfo = allUsersResponse.data.find(
       (user) => user.username === username,
     );
     console.log(`userInfo found: ${JSON.stringify(userInfo)}`);
 
-    // Kiểm tra nếu không tìm thấy user
     if (!userInfo) {
       throw new UnauthorizedException('User not found');
     }
 
-    // Kiểm tra xem userProfile có tồn tại
     const userProfile = userInfo.userProfile;
     if (!userProfile) {
       throw new UnauthorizedException('User profile not found');
     }
     console.log(`UserProfile found: ${JSON.stringify(userProfile)}`);
 
-    // Nếu mật khẩu không có dấu "." thì mật khẩu là plain text
     if (!userProfile.password.includes('.')) {
-      // So sánh mật khẩu dạng plain text
       if (userProfile.password !== pass) {
         throw new UnauthorizedException('Invalid credentials');
       }
     } else {
-      // Nếu mật khẩu đã được hash và chứa salt
       const [storedHash, salt] = userProfile.password.split('.');
 
       if (!storedHash || !salt) {
@@ -125,7 +131,6 @@ export class AuthService {
       }
     }
 
-    // Tạo payload cho JWT token
     const payload = {
       sub: userInfo.id,
       username: userInfo.username,
@@ -133,7 +138,6 @@ export class AuthService {
     };
     console.log(`Login successful for username: ${username}`);
 
-    // Trả về JWT token
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
@@ -144,7 +148,6 @@ export class AuthService {
     const gmail = emails[0].value;
     const username = gmail.split('@')[0];
 
-    // Sử dụng hàm getUserProfileByEmail từ userProfileService để tìm user theo email
     const userProfileResponse = await lastValueFrom(
       this.userProfileService.getUserProfileByEmail(gmail),
     );
@@ -152,7 +155,6 @@ export class AuthService {
     let user = userProfileResponse?.userProfile;
 
     if (!user) {
-      // Nếu người dùng không tồn tại, tạo mới userInfo và userProfile qua hàm createUserWithProfile
       const createUserDto: CreateUserWithProfileDto = {
         username: username,
         email: gmail,
@@ -191,7 +193,6 @@ export class AuthService {
         throw new UnauthorizedException('Invalid token');
       }
 
-      // Get user info from token
       const userInfoResponse = await lastValueFrom(
         this.userInfoServiceClient.getUserInfoId({ id: decodedToken.sub }),
       );
@@ -215,5 +216,47 @@ export class AuthService {
       .pbkdf2Sync(password, salt, 10000, 64, 'sha512')
       .toString('hex');
     return `${hash}.${salt}`;
+  }
+
+  async forgotPassword(username: string): Promise<void> {
+    const allUsersResponse = await lastValueFrom(
+      this.userInfoService.getAllUsers({ username }),
+    );
+
+    const userInfo = allUsersResponse.data.find(
+      (user) => user.username === username,
+    );
+
+    if (!userInfo) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const email = userInfo.userProfile.email;
+    const userProfileId = userInfo.userProfile.id;
+
+    const payload = { email, userProfileId };
+    console.log('Payload for reset password:', payload);
+
+    const token = this.jwtService.sign(payload);
+
+    const url = `${this.configService.get('RESET_PASSWORD_URL')}?token=${token}`;
+
+    const text = `Hi, \nTo reset your password, click here: ${url}`;
+
+    const data: SendMailRequest = {
+      to: email,
+      subject: 'Reset password',
+      text: text,
+    };
+    console.log('Sending reset password email to:', data);
+
+    this.mailService.sendResetPasswordLink(data).subscribe({
+      next: (mailResponse: SendMailResponse) => {
+        console.log('Email sent successfully', mailResponse);
+      },
+      error: (error) => {
+        console.error('Error sending email: ', error.message);
+      },
+    });
   }
 }

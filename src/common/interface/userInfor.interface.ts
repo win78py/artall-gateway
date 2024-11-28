@@ -3,9 +3,19 @@ import { UserProfileResponse } from './userProfile.interface';
 
 export interface UserInfoServiceClient {
   getAllUsers(request: GetAllUsersInfoRequest): Observable<UsersResponse>;
+  getAllUsersDeleted(
+    request: GetAllUsersInfoRequest,
+  ): Observable<UsersResponse>;
   getAllUsersInfo(
     request: GetAllUsersInfoRequest,
   ): Observable<UsersInfoResponse>;
+  getSuggestedUsers(
+    request: GetAllUsersInfoRequest,
+  ): Observable<SuggestedUsersResponse>;
+  getTotalUsersInfo(
+    request: GetTotalUsersInfoRequest,
+  ): Observable<TotalUsersResponse>;
+  getUserId(request: GetUserIdRequest): Observable<UserResponse>;
   getUserInfoId(request: GetUserInfoIdRequest): Observable<UserResponse>;
   createUserInfo(request: CreateUserInfoRequest): Observable<UserInfoResponse>;
   checkUserInfoExists(
@@ -23,6 +33,14 @@ export interface GetAllUsersInfoRequest {
   skip?: number;
   username?: string;
   fullName?: string;
+}
+
+export interface GetTotalUsersInfoRequest {
+  period?: string;
+}
+
+export interface GetUserIdRequest {
+  id: string;
 }
 
 export interface GetUserInfoIdRequest {
@@ -65,6 +83,19 @@ export interface UserInfoResponse {
   deletedBy: string;
 }
 
+export interface SuggestedUserResponse {
+  id: string;
+  username: string;
+  profilePicture: string;
+  followerCount: number;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  deletedAt: string;
+  deletedBy: string;
+}
+
 export interface UserResponse {
   id: string;
   username: string;
@@ -98,6 +129,17 @@ export interface UserResponse {
     deletedAt: string;
     deletedBy: string;
   };
+  postCount?: number;
+  followerCount?: number;
+  followingCount?: number;
+}
+
+export interface TotalUsersResponse {
+  total: number;
+  oldCount: number;
+  currentCount: number;
+  percentageUserChange: number;
+  joinCounts?: Record<number, number>;
 }
 
 export interface UsersResponse {
@@ -108,6 +150,12 @@ export interface UsersResponse {
 
 export interface UsersInfoResponse {
   data: UserInfoResponse[];
+  meta: PageMeta;
+  message: string;
+}
+
+export interface SuggestedUsersResponse {
+  data: SuggestedUserResponse[];
   meta: PageMeta;
   message: string;
 }

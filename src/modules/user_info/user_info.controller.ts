@@ -15,6 +15,9 @@ import { Observable } from 'rxjs';
 import {
   DeleteUserInfoResponse,
   GetAllUsersInfoRequest,
+  GetTotalUsersInfoRequest,
+  SuggestedUsersResponse,
+  TotalUsersResponse,
   UserInfoResponse,
   UserInfoWithProfileResponse,
   UserResponse,
@@ -26,19 +29,59 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserInfoDto } from './dto/update-userInfo.dto';
 import { CreateUserInfoDto } from './dto/create-user_info.dto';
 import { CreateUserWithProfileDto } from './dto/create-user.dto';
+import { PageOptionsDto } from 'common/dtos/pageOption';
 
 @Controller('user-info')
 export class UserInfoController {
   constructor(private readonly userInfoService: UserInfoService) {}
 
   @Get('user')
-  getAllUsers(@Query() query): Observable<UsersResponse> {
+  getAllUsers(@Query() query: PageOptionsDto): Observable<UsersResponse> {
     const params: GetAllUsersInfoRequest = {
       page: query.page || 1,
       take: query.take || 10,
+      skip: query.skip || 0,
       username: query.username || '',
     };
     return this.userInfoService.getAllUsers(params);
+  }
+
+  @Get('user/deleted')
+  getAllUsersDeleted(
+    @Query() query: PageOptionsDto,
+  ): Observable<UsersResponse> {
+    const params: GetAllUsersInfoRequest = {
+      page: query.page || 1,
+      take: query.take || 10,
+      skip: query.skip || 0,
+      username: query.username || '',
+    };
+    return this.userInfoService.getAllUsersDeleted(params);
+  }
+
+  @Get('suggested')
+  getSuggestedUsers(@Query() query): Observable<SuggestedUsersResponse> {
+    const params: GetAllUsersInfoRequest = {
+      page: query.page || 1,
+      take: query.take || 5,
+      skip: query.skip || 0,
+    };
+    return this.userInfoService.getSuggestedUsers(params);
+  }
+
+  @Get('total')
+  getTotalUsersInfo(
+    @Query() query: PageOptionsDto,
+  ): Observable<TotalUsersResponse> {
+    const params: GetTotalUsersInfoRequest = {
+      period: query.period || '',
+    };
+    return this.userInfoService.getTotalUsersInfo(params);
+  }
+
+  @Get('user/:id')
+  getUserById(@Param('id') id: string): Observable<UserResponse> {
+    return this.userInfoService.getUserById(id);
   }
 
   @Get()
@@ -46,6 +89,7 @@ export class UserInfoController {
     const params: GetAllUsersInfoRequest = {
       page: query.page || 1,
       take: query.take || 10,
+      skip: query.skip || 0,
       username: query.username || '',
       fullName: query.fullName || '',
     };
@@ -64,7 +108,7 @@ export class UserInfoController {
     return this.userInfoService.createUserInfo(body);
   }
 
-  @Post('create-with-profile')
+  @Post('register')
   createUserWithProfile(
     @Body() body: CreateUserWithProfileDto,
   ): Observable<UserInfoWithProfileResponse> {

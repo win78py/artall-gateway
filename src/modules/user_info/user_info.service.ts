@@ -13,7 +13,11 @@ import {
   CreateUserInfoRequest,
   DeleteUserInfoResponse,
   GetAllUsersInfoRequest,
+  GetTotalUsersInfoRequest,
+  GetUserIdRequest,
   GetUserInfoIdRequest,
+  SuggestedUsersResponse,
+  TotalUsersResponse,
   UpdateUserInfoRequest,
   UserInfoResponse,
   UserInfoServiceClient,
@@ -54,6 +58,29 @@ export class UserInfoService {
 
   getAllUsers(params: GetAllUsersInfoRequest): Observable<UsersResponse> {
     return this.userInfoServiceClient.getAllUsers(params);
+  }
+
+  getAllUsersDeleted(
+    params: GetAllUsersInfoRequest,
+  ): Observable<UsersResponse> {
+    return this.userInfoServiceClient.getAllUsersDeleted(params);
+  }
+
+  getUserById(id: string): Observable<UserResponse> {
+    const request: GetUserIdRequest = { id };
+    return this.userInfoServiceClient.getUserId(request);
+  }
+
+  getSuggestedUsers(
+    params: GetAllUsersInfoRequest,
+  ): Observable<SuggestedUsersResponse> {
+    return this.userInfoServiceClient.getSuggestedUsers(params);
+  }
+
+  getTotalUsersInfo(
+    params: GetTotalUsersInfoRequest,
+  ): Observable<TotalUsersResponse> {
+    return this.userInfoServiceClient.getTotalUsersInfo(params);
   }
 
   getAllUsersInfo(
@@ -128,8 +155,8 @@ export class UserInfoService {
             .pipe(
               map((userProfileResponse) => {
                 return {
-                  userInfo: userInfoResponse, // Chứa thông tin userInfo
-                  userProfile: userProfileResponse, // Chứa thông tin userProfile
+                  userInfo: userInfoResponse,
+                  userProfile: userProfileResponse,
                 } as UserInfoWithProfileResponse;
               }),
             );

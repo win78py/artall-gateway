@@ -9,6 +9,8 @@ import {
   UseInterceptors,
   Delete,
   UploadedFiles,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Observable } from 'rxjs';
@@ -17,29 +19,89 @@ import {
   GetAllPostsRequest,
   PostsResponse,
   PostResponse,
+  GetPostIdRequest,
+  TotalPostsResponse,
+  GetTotalPostsRequest,
 } from '../../common/interface/post.interface';
 import { Multer } from 'multer';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PageOptionsDto } from 'common/dtos/pageOption';
+import { AuthGuard } from '../auth/utils/auth.guard';
+import { RoleEnum } from 'common/enum/enum';
+import { RolesGuard } from '../auth/utils/role.middleware';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get()
-  getAllPosts(@Query() query): Observable<PostsResponse> {
+  @UseGuards(AuthGuard, new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN]))
+  getAllPosts(
+    @Query() query: PageOptionsDto,
+    @Req() request: any,
+  ): Observable<PostsResponse> {
+    const userId = request.user?.sub;
     const params: GetAllPostsRequest = {
       page: query.page || 1,
       take: query.take || 10,
+      skip: query.skip || 0,
+      content: query.content || '',
+      userId: userId,
+    };
+
+    return this.postService.getAllPosts(params, request);
+  }
+
+  @Get('random-posts')
+  getRandomPosts(@Query() query: PageOptionsDto): Observable<PostsResponse> {
+    const params: GetAllPostsRequest = {
+      page: query.page || 1,
+      take: query.take || 10,
+      skip: query.skip || 0,
       content: query.content || '',
     };
-    return this.postService.getAllPosts(params);
+    return this.postService.getRandomPosts(params);
+  }
+
+  @Get('deleted')
+  @UseGuards(AuthGuard, new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN]))
+  getPostsDeleted(
+    @Query() query: PageOptionsDto,
+    @Req() request: any,
+  ): Observable<PostsResponse> {
+    const userId = request.user?.sub;
+    const params: GetAllPostsRequest = {
+      page: query.page || 1,
+      take: query.take || 10,
+      skip: query.skip || 0,
+      content: query.content || '',
+      userId: userId,
+    };
+    return this.postService.getPostsDeleted(params, request);
+  }
+
+  @Get('total')
+  getTotalUsersInfo(
+    @Query() query: PageOptionsDto,
+  ): Observable<TotalPostsResponse> {
+    const params: GetTotalPostsRequest = {
+      period: query.period || 'year',
+    };
+    console.log('params: ', params);
+    return this.postService.getTotalPosts(params);
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string): Observable<PostResponse> {
-    return this.postService.getPostById(id);
+  @UseGuards(AuthGuard, new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN]))
+  getPostById(
+    @Param('id') id: string,
+    @Req() request: any,
+  ): Observable<PostResponse> {
+    const userId = request.user?.sub;
+    const param: GetPostIdRequest = { id, userId };
+    return this.postService.getPostById(param);
   }
 
   @Post()

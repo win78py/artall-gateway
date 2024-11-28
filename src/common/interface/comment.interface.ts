@@ -16,7 +16,9 @@ export interface CommentServiceClient {
 export interface GetAllCommentsRequest {
   page?: number;
   take?: number;
-  content?: string;
+  skip?: number;
+  postId?: string;
+  userId?: string;
 }
 
 export interface GetCommentIdRequest {
@@ -63,6 +65,8 @@ export interface CommentInfoResponse {
     username: string;
     profilePicture: string;
   };
+  likeCount: number;
+  isLiked: boolean;
 }
 
 export interface CommentResponse {

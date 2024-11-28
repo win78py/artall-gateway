@@ -15,7 +15,7 @@ async function bootstrap() {
   });
   app.use(
     session({
-      secret: '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',
+      secret: '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',
       resave: false,
       saveUninitialized: false,
       cookie: { secure: false },

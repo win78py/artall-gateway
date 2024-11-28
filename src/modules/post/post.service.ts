@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { catchError, map, Observable, switchMap } from 'rxjs';
@@ -19,6 +20,8 @@ import {
   UpdatePostRequest,
   PostResponse,
   PostsResponse,
+  GetTotalPostsRequest,
+  TotalPostsResponse,
 } from '../../common/interface/post.interface';
 import { Multer } from 'multer';
 import { UseFilters } from '@nestjs/common';
@@ -26,6 +29,8 @@ import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exceptio
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreatePostDto } from './dto/create-post.dto';
 import { validate as uuidValidate } from 'uuid';
+
+import { JwtStrategy } from 'modules/auth/utils/jwt.stratery';
 
 @Injectable()
 @UseFilters(GatewayExceptionFilter)
@@ -40,12 +45,40 @@ export class PostService {
       this.client.getService<PostServiceClient>('PostService');
   }
 
-  getAllPosts(params: GetAllPostsRequest): Observable<PostsResponse> {
+  getAllPosts(params: GetAllPostsRequest, request): Observable<PostsResponse> {
+    const token = request.headers.authorization.split(' ')[1];
+
+    const userId = JwtStrategy.getUserIdFromToken(token);
+
+    if (!userId) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
     return this.postServiceClient.getAllPosts(params);
   }
 
-  getPostById(id: string): Observable<PostResponse> {
-    const request: GetPostIdRequest = { id };
+  getRandomPosts(params: GetAllPostsRequest): Observable<PostsResponse> {
+    return this.postServiceClient.getRandomPosts(params);
+  }
+
+  getPostsDeleted(
+    params: GetAllPostsRequest,
+    request,
+  ): Observable<PostsResponse> {
+    const token = request.headers.authorization.split(' ')[1];
+
+    const userId = JwtStrategy.getUserIdFromToken(token);
+
+    if (!userId) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+    return this.postServiceClient.getPostsDeleted(params);
+  }
+
+  getTotalPosts(params: GetTotalPostsRequest): Observable<TotalPostsResponse> {
+    return this.postServiceClient.getTotalPosts(params);
+  }
+
+  getPostById(request: GetPostIdRequest): Observable<PostResponse> {
     return this.postServiceClient.getPostId(request);
   }
 

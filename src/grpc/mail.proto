@@ -3,15 +3,15 @@ syntax = "proto3";
 package mail;
 
 service MailService {
-  rpc SendMail (MailRequest) returns (MailResponse);
+  rpc SendResetPasswordLink (SendMailRequest) returns (SendMailResponse);
 }
 
-message MailRequest {
-  string email = 1;
+message SendMailRequest {
+  string to = 1;
   string subject = 2;
-  string body = 3;
+  string text = 3;
 }
 
-message MailResponse {
+message SendMailResponse {
   bool success = 1;
 }
