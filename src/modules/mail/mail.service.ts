@@ -27,7 +27,6 @@ export class MailService {
   // }
 
   sendResetPasswordLink(data: SendMailRequest): Observable<SendMailResponse> {
-    // Gửi mail qua gRPC
     return this.mailServiceClient.sendResetPasswordLink(data);
   }
 }
