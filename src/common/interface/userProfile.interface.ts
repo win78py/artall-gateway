@@ -4,6 +4,9 @@ export interface UserProfileServiceClient {
   getAllUsersProfile(
     request: GetAllUsersProfileRequest,
   ): Observable<UsersProfileResponse>;
+  getUserDemographics(
+    request: GetAllUsersProfileRequest,
+  ): Observable<UserDemographicsResponse>;
   getUserProfileId(
     request: GetUserProfileIdRequest,
   ): Observable<UserProfileResponse>;
@@ -111,6 +114,14 @@ export interface UserProfileResponse {
   updatedBy: string;
   deletedAt: string;
   deletedBy: string;
+}
+
+export interface UserDemographicsResponse {
+  demographics: {
+    ageGroup: string;
+    maleCount: number;
+    femaleCount: number;
+  }[];
 }
 
 export interface UsersProfileResponse {

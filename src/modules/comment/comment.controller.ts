@@ -9,6 +9,8 @@ import {
   UseInterceptors,
   Delete,
   UploadedFiles,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { Observable } from 'rxjs';
@@ -22,19 +24,30 @@ import { Multer } from 'multer';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { PageOptionsDto } from 'common/dtos/pageOption';
+import { RoleEnum } from 'common/enum/enum';
+import { AuthGuard } from '../auth/utils/auth.guard';
+import { RolesGuard } from '../auth/utils/role.middleware';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get()
-  getAllComments(@Query() query): Observable<CommentsResponse> {
+  @UseGuards(AuthGuard, new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN]))
+  getAllComments(
+    @Query() query: PageOptionsDto,
+    @Req() request: any,
+  ): Observable<CommentsResponse> {
+    const userId = request.user?.sub;
     const params: GetAllCommentsRequest = {
       page: query.page || 1,
       take: query.take || 10,
-      content: query.content || '',
+      skip: query.skip || 0,
+      postId: query.postId || '',
+      userId: userId,
     };
-    return this.commentService.getAllComments(params);
+    return this.commentService.getAllComments(params, request);
   }
 
   @Get(':id')

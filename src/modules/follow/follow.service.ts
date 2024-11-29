@@ -17,6 +17,7 @@ import {
   FollowResponse,
   FollowServiceClient,
   ManyFollowResponse,
+  ToggleFollowResponse,
 } from '../../common/interface/follow.interface';
 import { UseFilters } from '@nestjs/common';
 import { GatewayExceptionFilter } from '../../common/exceptions/gateway.exception';
@@ -51,6 +52,26 @@ export class FollowService {
     };
 
     return this.followServiceClient.createFollow(request).pipe(
+      catchError((error) => {
+        if (error instanceof HttpException) {
+          throw new RpcException(error.message);
+        }
+        throw new RpcException('Internal server error');
+      }),
+    );
+  }
+
+  toggleFollow(dto: CreateFollowDto): Observable<ToggleFollowResponse> {
+    const request: CreateFollowRequest = {
+      followerId: dto.followerId,
+      followingId: dto.followingId,
+    };
+
+    return this.followServiceClient.toggleFollow(request).pipe(
+      map((response) => ({
+        data: response.data,
+        message: response.message,
+      })),
       catchError((error) => {
         if (error instanceof HttpException) {
           throw new RpcException(error.message);

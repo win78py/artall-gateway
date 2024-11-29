@@ -52,4 +52,11 @@ export class AuthController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  @Post('forgot-password')
+  async forgotPassword(
+    @Body() { username }: { username: string },
+  ): Promise<void> {
+    return this.authService.forgotPassword(username);
+  }
 }

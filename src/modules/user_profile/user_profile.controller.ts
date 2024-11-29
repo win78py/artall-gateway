@@ -14,6 +14,7 @@ import {
   DeleteUserProfileResponse,
   GetAllUsersProfileRequest,
   GetUserProfileByEmailResponse,
+  UserDemographicsResponse,
   UserProfileResponse,
   UsersProfileResponse,
 } from '../../common/interface/userProfile.interface';
@@ -33,6 +34,17 @@ export class UserProfileController {
       userInfoId: query.userInfoId || '',
     };
     return this.userProfileService.getAllUsersProfile(params);
+  }
+
+  @Get('demographics')
+  getUserDemographics(@Query() query): Observable<UserDemographicsResponse> {
+    const params: GetAllUsersProfileRequest = {
+      page: query.page || 1,
+      take: query.take || 10,
+      fullName: query.fullName || '',
+      userInfoId: query.userInfoId || '',
+    };
+    return this.userProfileService.getUserDemographics(params);
   }
 
   @Get(':id')

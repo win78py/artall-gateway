@@ -1,24 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { Client, ClientGrpc } from '@nestjs/microservices';
+import { Inject, Injectable, UseFilters } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import {
+  MailServiceClient,
   SendMailRequest,
   SendMailResponse,
 } from '../../common/interface/mail.interface';
-import { grpcMailClientOptions } from '../../grpc/grpc-client.options';
+import { GatewayExceptionFilter } from 'common/exceptions/gateway.exception';
 
 @Injectable()
+@UseFilters(GatewayExceptionFilter)
 export class MailService {
-  @Client(grpcMailClientOptions)
-  private readonly client: ClientGrpc;
+  private mailServiceClient: MailServiceClient;
 
-  private mailServiceClient: any;
+  constructor(@Inject('MAIL_SERVICE') private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.mailServiceClient = this.client.getService('MailService');
+    this.mailServiceClient =
+      this.client.getService<MailServiceClient>('MailService');
   }
 
-  sendMail(data: SendMailRequest): Observable<SendMailResponse> {
-    return this.mailServiceClient.sendMail(data);
+  // sendMailTest(data: SendMailRequest): Observable<SendMailResponse> {
+  //   console.log('Received SendMailRequest:', data);
+
+  //   return this.mailServiceClient.sendMail(data);
+  // }
+
+  sendResetPasswordLink(data: SendMailRequest): Observable<SendMailResponse> {
+    // Gửi mail qua gRPC
+    return this.mailServiceClient.sendResetPasswordLink(data);
   }
 }

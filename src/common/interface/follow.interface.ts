@@ -4,6 +4,7 @@ export interface FollowServiceClient {
   getAllFollow(request: GetAllFollowRequest): Observable<ManyFollowResponse>;
   getFollowId(request: GetFollowIdRequest): Observable<FollowResponse>;
   createFollow(request: CreateFollowRequest): Observable<FollowResponse>;
+  toggleFollow(request: CreateFollowRequest): Observable<ToggleFollowResponse>;
   checkFollowExists(
     request: CheckFollowExistsRequest,
   ): Observable<CheckFollowExistsResponse>;
@@ -17,6 +18,8 @@ export interface GetAllFollowRequest {
   skip?: number;
   follower?: string;
   following?: string;
+  followerUsername?: string;
+  followingUsername?: string;
 }
 
 export interface GetFollowIdRequest {
@@ -26,6 +29,11 @@ export interface GetFollowIdRequest {
 export interface CreateFollowRequest {
   followerId: string;
   followingId: string;
+}
+
+export interface ToggleFollowResponse {
+  data: FollowResponse | null;
+  message: string;
 }
 
 export interface CheckFollowExistsRequest {

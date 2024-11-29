@@ -5,6 +5,9 @@ package posts;
 service PostService {
   // Post --
   rpc GetAllPosts (GetAllPostsRequest) returns (PostsResponse);
+  rpc GetRandomPosts (GetAllPostsRequest) returns (PostsResponse);
+  rpc GetPostsDeleted (GetAllPostsRequest) returns (PostsResponse);
+  rpc GetTotalPosts (GetTotalPostsRequest) returns (TotalPostsResponse);
   rpc GetPostId (GetPostIdRequest) returns (PostResponse);
   rpc CreatePost (CreatePostRequest) returns (PostResponse);
   rpc CheckPostExists (CheckPostExistsRequest) returns (CheckPostExistsResponse);
@@ -38,7 +41,13 @@ service PostService {
 message GetAllPostsRequest {
   int32 page = 1;
   int32 take = 2;
-  string content = 3;
+  int32 skip = 3;
+  string content = 4;
+  string userId = 5;
+}
+
+message GetTotalPostsRequest {
+  string period = 1;
 }
 
 message GetPostIdRequest {
@@ -78,6 +87,17 @@ message PostResponse {
   string deletedBy = 9;
   string userId = 10;
   UserInfo userInfo = 11;
+  int32 likeCount = 12;
+  int32 commentCount = 13;
+  bool isLiked = 14;
+}
+
+message TotalPostsResponse {
+  int32 total = 1;
+  int32 oldCount = 2;
+  int32 currentCount = 3;
+  int32 percentagePostChange = 4;
+  map<int32, int32> joinCounts = 5;
 }
 
 message UserInfo {
@@ -153,7 +173,9 @@ message ToggleLikeResponse {
 message GetAllCommentsRequest {
   int32 page = 1;
   int32 take = 2;
-  string content = 3;
+  int32 skip = 3;
+  string postId = 4;
+  string userId = 5;
 }
 
 message GetCommentIdRequest {
@@ -196,6 +218,8 @@ message CommentInfoResponse {
   string postId = 10;
   string userId = 11;
   UserInfo user = 12;
+  int32 likeCount = 13;
+  string isLiked = 14;
 }
 
 message CommentResponse {
@@ -210,6 +234,7 @@ message CommentResponse {
   string deletedBy = 9;
   string postId = 10;
   string userId = 11;
+  UserInfo user = 12;
 }
 
 message CommentsResponse {

@@ -5,7 +5,11 @@ package users;
 service UserService {
   // User Info --
   rpc GetAllUsers (GetAllUsersInfoRequest) returns (UsersResponse);
+  rpc GetAllUsersDeleted (GetAllUsersInfoRequest) returns (UsersResponse);
+  rpc GetUserId (GetUserIdRequest) returns (UserResponse);
   rpc GetAllUsersInfo (GetAllUsersInfoRequest) returns (UsersInfoResponse);
+  rpc GetTotalUsersInfo (GetTotalUsersInfoRequest) returns (TotalUsersResponse);
+  rpc GetSuggestedUsers (GetAllUsersInfoRequest) returns (SuggestedUsersResponse);
   rpc GetUserInfoId (GetUserInfoIdRequest) returns (UserInfoResponse);
   rpc CreateUserInfo (CreateUserInfoRequest) returns (UserInfoResponse);
   rpc CheckUserInfoExists (CheckUserInfoExistsRequest) returns (CheckUserInfoExistsResponse);
@@ -14,6 +18,7 @@ service UserService {
 
   // User Profile --
   rpc GetAllUsersProfile (GetAllUsersProfileRequest) returns (UsersProfileResponse);
+  rpc GetUserDemographics (GetAllUsersProfileRequest) returns (UserDemographicsResponse);
   rpc GetUserProfileId (GetUserProfileIdRequest) returns (UserProfileResponse);
   rpc GetUserProfileEmail (GetUserProfileByEmailRequest) returns (GetUserProfileByEmailResponse);
   rpc CreateUserProfile (CreateUserProfileRequest) returns (UserProfileResponse);
@@ -28,6 +33,7 @@ service UserService {
   rpc CheckFollowExists (CheckFollowExistsRequest) returns (CheckFollowExistsResponse);
   rpc UpdateFollow (UpdateFollowRequest) returns (FollowResponse);
   rpc DeleteFollow (DeleteFollowRequest) returns (DeleteFollowResponse);
+  rpc ToggleFollow (CreateFollowRequest) returns (ToggleFollowResponse);
 
   // Block --
   rpc GetAllBlockList (GetAllBlockListRequest) returns (ManyBlockResponse);
@@ -45,6 +51,14 @@ message GetAllUsersInfoRequest {
   int32 skip = 3;
   string username = 4;
   string fullName = 5;
+}
+
+message GetTotalUsersInfoRequest {
+  string period = 1;
+}
+
+message GetUserIdRequest {
+  string id = 1;
 }
 
 message GetUserInfoIdRequest {
@@ -80,7 +94,10 @@ message UserResponse {
   string updatedBy = 7;
   string deletedAt = 8;
   string deletedBy = 9;
-  UserProfile userProfile = 10;
+  string postCount = 10;
+  string followerCount = 11;
+  string followingCount = 12;
+  UserProfile userProfile = 13;
 }
 
 message UserProfile {
@@ -120,6 +137,37 @@ message UserInfoResponse {
   string deletedBy = 9;
 }
 
+message SuggestedUserResponse {
+  string id = 1;
+  string username = 2;
+  string profilePicture = 3;
+  string createdAt = 4;
+  string createdBy = 5 ;
+  string updatedAt = 6;
+  string updatedBy = 7;
+  string deletedAt = 8;
+  string deletedBy = 9;
+  string followerCount = 10;
+}
+
+message TotalUsersResponse {
+  int32 total = 1;
+  int32 oldCount = 2;
+  int32 currentCount = 3;
+  int32 percentageUserChange = 4;
+  map<int32, int32> joinCounts = 5;
+}
+
+message DemographicsItem {
+  string ageGroup = 1;
+  int32 maleCount = 2;
+  int32 femaleCount = 3;
+}
+
+message UserDemographicsResponse {
+  repeated DemographicsItem demographics = 1;
+}
+
 message UsersResponse {
   repeated UserResponse data = 1;
   PageMeta meta = 2;
@@ -128,6 +176,12 @@ message UsersResponse {
 
 message UsersInfoResponse {
   repeated UserInfoResponse data = 1;
+  PageMeta meta = 2;
+  string message = 3;
+}
+
+message SuggestedUsersResponse {
+  repeated SuggestedUserResponse data = 1;
   PageMeta meta = 2;
   string message = 3;
 }
@@ -270,6 +324,8 @@ message GetAllFollowRequest {
   int32 skip = 3;
   string follower = 4;
   string following = 5;
+  string followerUsername = 6;
+  string followingUsername = 7;
 }
 
 message GetFollowIdRequest {
@@ -279,6 +335,11 @@ message GetFollowIdRequest {
 message CreateFollowRequest {
   string followerId = 1;
   string followingId = 2;
+}
+
+message ToggleFollowResponse {
+  FollowResponse data = 1;
+  string message = 2;
 }
 
 message CheckFollowExistsRequest {

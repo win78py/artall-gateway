@@ -4,7 +4,22 @@ import { Order } from '../enum/enum';
 
 export class PageOptionsDto {
   @IsString()
-  search?: string = '';
+  content?: string = '';
+
+  @IsString()
+  postId?: string = '';
+
+  follower?: string = '';
+
+  following?: string = '';
+
+  followerUsername?: string = '';
+
+  followingUsername?: string = '';
+
+  username?: string = '';
+
+  period?: string = '';
 
   @IsEnum(Order)
   @IsOptional()
