@@ -37,7 +37,10 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get()
-  @UseGuards(AuthGuard, new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN]))
+  @UseGuards(
+    AuthGuard,
+    new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN, RoleEnum.GUEST]),
+  )
   getAllPosts(
     @Query() query: PageOptionsDto,
     @Req() request: any,
@@ -49,20 +52,30 @@ export class PostController {
       skip: query.skip || 0,
       content: query.content || '',
       userId: userId,
+      userIdProfile: query.userIdProfile || '',
     };
 
     return this.postService.getAllPosts(params, request);
   }
 
   @Get('random-posts')
-  getRandomPosts(@Query() query: PageOptionsDto): Observable<PostsResponse> {
+  @UseGuards(
+    AuthGuard,
+    new RolesGuard([RoleEnum.USER, RoleEnum.ADMIN, RoleEnum.GUEST]),
+  )
+  getRandomPosts(
+    @Query() query: PageOptionsDto,
+    @Req() request: any,
+  ): Observable<PostsResponse> {
+    const userId = request.user?.sub;
     const params: GetAllPostsRequest = {
       page: query.page || 1,
       take: query.take || 10,
       skip: query.skip || 0,
       content: query.content || '',
+      userId: userId,
     };
-    return this.postService.getRandomPosts(params);
+    return this.postService.getRandomPosts(params, request);
   }
 
   @Get('deleted')

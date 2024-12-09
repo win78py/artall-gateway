@@ -56,7 +56,17 @@ export class PostService {
     return this.postServiceClient.getAllPosts(params);
   }
 
-  getRandomPosts(params: GetAllPostsRequest): Observable<PostsResponse> {
+  getRandomPosts(
+    params: GetAllPostsRequest,
+    request,
+  ): Observable<PostsResponse> {
+    const token = request.headers.authorization.split(' ')[1];
+
+    const userId = JwtStrategy.getUserIdFromToken(token);
+
+    if (!userId) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
     return this.postServiceClient.getRandomPosts(params);
   }
 

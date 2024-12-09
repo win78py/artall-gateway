@@ -16,6 +16,7 @@ import { UserProfileModule } from './modules/user_profile/user_profile.module';
 import { LikeModule } from './modules/like/like.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeCommentModule } from './modules/likeComment/likeComment.module';
+import { DonationModule } from './modules/donation/donate.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
@@ -31,6 +32,7 @@ import { AuthModule } from './modules/auth/auth.module';
     LikeModule,
     CommentModule,
     LikeCommentModule,
+    DonationModule,
     AuthModule,
     ClientsModule.register([
       {
