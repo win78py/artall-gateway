@@ -13,6 +13,7 @@ service PostService {
   rpc CheckPostExists (CheckPostExistsRequest) returns (CheckPostExistsResponse);
   rpc UpdatePost (UpdatePostRequest) returns (PostResponse);
   rpc DeletePost (DeletePostRequest) returns (DeletePostResponse);
+  rpc RestorePost (DeletePostRequest) returns (DeletePostResponse);
 
   // Like --
   rpc GetAllLikes (GetAllLikesRequest) returns (LikesResponse);
@@ -35,6 +36,10 @@ service PostService {
   rpc CreateLikeComment (CreateLikeCommentRequest) returns (LikeCommentResponse);
   rpc CheckLikeCommentExists (CheckLikeCommentExistsRequest) returns (CheckLikeCommentExistsResponse);
   rpc ToggleLikeComment (CreateLikeCommentRequest) returns (ToggleLikeCommentResponse);
+
+  // Donation --
+  rpc GetDonations (GetDonationsRequest) returns (DonationsResponse);
+  rpc CreateDonation (CreateDonationRequest) returns (DonationResponse);
 }
 
 // Post --
@@ -44,6 +49,7 @@ message GetAllPostsRequest {
   int32 skip = 3;
   string content = 4;
   string userId = 5;
+  string userIdProfile =6;
 }
 
 message GetTotalPostsRequest {
@@ -90,6 +96,7 @@ message PostResponse {
   int32 likeCount = 12;
   int32 commentCount = 13;
   bool isLiked = 14;
+  int32 totalDonation = 15;
 }
 
 message TotalPostsResponse {
@@ -299,6 +306,50 @@ message LikesCommentResponse {
 message ToggleLikeCommentResponse {
   LikeCommentResponse data = 1;
   string message = 2;
+}
+
+// Donation --
+message GetDonationsRequest {
+  int32 page = 1;
+  int32 take = 2;
+  int32 skip = 3;
+}
+
+message CreateDonationRequest {
+  string postId = 1;
+  string userId = 2;
+  int32 amount = 3;
+}
+
+message DonationResponse {
+  int32 return_code = 1;
+  string return_message = 2;
+  int32 sub_return_code = 3;
+  string sub_return_message = 4;
+  string zp_trans_token = 5;
+  string order_url = 6;
+  string order_token = 7;
+  string app_trans_id = 8;
+}
+
+message Donation1Response {
+  string id = 1;
+  string postId = 2;
+  string userId = 3;
+  int32 amount = 4;
+  string createdAt = 5;
+  string createdBy = 6;
+  string updatedAt = 7;
+  string updatedBy = 8;
+  string deletedAt = 9;
+  string deletedBy = 10;
+  string username = 11;
+}
+
+message DonationsResponse {
+  repeated Donation1Response data = 1;
+  PageMeta meta = 2;
+  string message = 3;
 }
 
 // DTOs --

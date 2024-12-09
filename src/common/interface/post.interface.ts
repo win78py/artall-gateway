@@ -12,6 +12,7 @@ export interface PostServiceClient {
   ): Observable<CheckPostExistsResponse>;
   updatePost(request: UpdatePostRequest): Observable<PostResponse>;
   deletePost(request: DeletePostRequest): Observable<DeletePostResponse>;
+  restorePost(request: DeletePostRequest): Observable<DeletePostResponse>;
 }
 
 export interface GetAllPostsRequest {
@@ -20,6 +21,7 @@ export interface GetAllPostsRequest {
   skip?: number;
   content?: string;
   userId?: string;
+  userIdProfile?: string;
 }
 
 export interface GetTotalPostsRequest {
@@ -71,6 +73,7 @@ export interface PostInfoResponse {
   likeCount: number;
   commentCount: number;
   isLiked: boolean;
+  totalDonation: number;
 }
 
 export interface PostResponse {

@@ -9,6 +9,8 @@ export class PageOptionsDto {
   @IsString()
   postId?: string = '';
 
+  userIdProfile?: string = '';
+
   follower?: string = '';
 
   following?: string = '';
