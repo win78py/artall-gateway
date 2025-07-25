@@ -9,6 +9,11 @@
 
 Node.js/NestJS API gateway. It routes requests to microservices and handles auth.
 
+## Tech Stack
+- NestJS, TypeScript
+- gRPC clients for User, Post, Mail services
+- JWT authentication
+
 ### Overall Picture
 <img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/0329f15d-fb65-42f7-81a6-b7f515ec314a" />
 
