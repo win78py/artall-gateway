@@ -1,30 +1,32 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="https://github.com/win78py" target="blank"><img src="https://res.cloudinary.com/dekmn1kko/image/upload/v1726824769/artall_icon.png" width="100" alt="Artall Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Artall Gateway (`artall_gateway`)
+**Artall** - Social network for designers.
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Node.js/NestJS API gateway. It routes requests to microservices and handles auth.
+
+### Overall Picture
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/0329f15d-fb65-42f7-81a6-b7f515ec314a" />
+
+### Architecture
+<img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/321b1ffd-4b81-48c9-866e-6159cfe7ac43" />
+
+
+### Container Diagram
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/d13d471b-76c2-47be-a068-c1433950d4e1" />
+
+### Activity Diagram
+<img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/c7e859aa-84af-4818-9ea4-3a67541bccba" />
+
+### ERD
+<img width="600" height="auto" alt="image" src="https://res.cloudinary.com/dnjkwuc7p/image/upload/v1753435017/diagram-export-7-25-2025-3_41_37-PM_z3zncu.png" />
+
+
+---
 
 ## Installation
 
@@ -58,16 +60,10 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-## Support
+---
+## Deploy
+- CodePipeline + ECR + ECS (https://dev.to/aws-builders/setting-up-cicd-in-aws-with-codecommit-codedeploy-codepipeline-ecr-and-ecs-5g6b)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
-
-Nest is [MIT licensed](LICENSE).
